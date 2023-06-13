@@ -148,7 +148,7 @@ We welcome contributions from the community. If you are interested in contributi
 
 
 ## License
-This project is licensed under the terms of the [MIT LICENSE](./LICENSE)
+This project is licensed under the terms of the [MIT LICENSE](./LICENSE).
 
 
 
