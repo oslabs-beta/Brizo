@@ -95,7 +95,7 @@ We welcome contributions from the community. If you are interested in contributi
 <table style="width:40%;">
   <tr>
     <td>
-      <img src="./assets/team/Cortland.png" style="width:6rem;" />
+      <img src="./assets/Team/Cortland.png" style="width:6rem;" />
     </td>
     <td>
       <strong>Cortland Young</strong><br/>
@@ -105,7 +105,7 @@ We welcome contributions from the community. If you are interested in contributi
   </tr>
   <tr>
     <td>
-      <img src="./assets/team/Owen.png" style="width:6rem;" />
+      <img src="./assets/Team/Owen.png" style="width:6rem;" />
     </td>
     <td>
       <strong>Owen Hill</strong><br/>
@@ -115,7 +115,7 @@ We welcome contributions from the community. If you are interested in contributi
   </tr>
   <tr>
     <td>
-      <img src="./assets/team/Jimmy.png" style="width:6rem;" />
+      <img src="./assets/Team/Jimmy.png" style="width:6rem;" />
     </td>
     <td>
       <strong>Jimmy Tran</strong><br/>
@@ -125,7 +125,7 @@ We welcome contributions from the community. If you are interested in contributi
   </tr>
   <tr>
     <td>
-      <img src="./assets/team/Weston.png" style="width:6rem;" />
+      <img src="./assets/Team/Weston.png" style="width:6rem;" />
     </td>
     <td>
       <strong>Weston Schott</strong><br/>
@@ -135,7 +135,7 @@ We welcome contributions from the community. If you are interested in contributi
   </tr>
   <tr>
     <td>
-      <img src="./assets/team/Anna.png" style="width:6rem;" />
+      <img src="./assets/Team/Anna.png" style="width:6rem;" />
     </td>
     <td>
       <strong>Qiong Yu (Anna)</strong><br/>
