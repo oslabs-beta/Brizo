@@ -115,7 +115,7 @@ We welcome contributions from the community. If you are interested in contributi
   </tr>
   <tr>
     <td>
-      <img src="./assets/Team/Jimmy.png" style="width:6rem;" />
+      <img src="./assets/Team/DAWG.png" style="width:6rem;" />
     </td>
     <td>
       <strong>Jimmy Tran</strong><br/>
