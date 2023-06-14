@@ -4,10 +4,11 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "start": "node server.ts"
+    "start": "node server/server.ts"
   },
   "dependencies": {
     "express": "^4.18.2",
+    "node": "^20.2.0",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
