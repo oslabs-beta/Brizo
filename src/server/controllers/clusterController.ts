@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { clusterControllerType } from '../../../types';
 
-// UNCOMMENT THE CONFIG PATH VARIABLE FOR YOUR MACHINE'S OS
-// put in .env
-const MAC_CONFIG_PATH = `$HOME/.kube/config`;
-const WINDOWS_CONFIG_PATH = `%USERPROFILE%/.kube/config`;
+// file path import from .env
+require('dotenv').config();
+const KUBE_FILE_PATH = process.env.KUBE_FILE_PATH;
 
 // declare k8s client node
 const k8s = require('@kubernetes/client-node');
@@ -13,7 +12,7 @@ const k8s = require('@kubernetes/client-node');
 const kc = new k8s.KubeConfig();
 
 // load from kube config file 
-kc.loadFromFile(MAC_CONFIG_PATH || WINDOWS_CONFIG_PATH);
+kc.loadFromFile(KUBE_FILE_PATH);
 
 // make api client
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);

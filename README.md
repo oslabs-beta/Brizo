@@ -61,7 +61,9 @@ cd brizo
 npm install
 ```
 5. Insert Env Dependent Instructions Here.
-
+  - In a .env file, create a variable labeled KUBE_FILE_PATH
+    - For mac/linux users, assign it a value of ```'$HOME/.kube/config'```
+    - For windows users, assign it a value of ```'%USERPROFILE%/.kube/config'```
 
 ## Scripts
 Below are descriptions of each npm script:
