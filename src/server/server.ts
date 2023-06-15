@@ -2,7 +2,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { ServerError } from '../../types';
 import apiRouter from '../server/routers/apiRouter';
-
 //------------------REQUIRES------------------//
 // require path & cors
 const path = require('path');
@@ -18,7 +17,7 @@ const app = express();
 
 // parse requests 
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, '../dist')));
+app.use(express.static(path.resolve(__dirname, '../client')));
 
 // set up api router
 app.use('/api', apiRouter);
@@ -26,11 +25,7 @@ app.use('/api', apiRouter);
 
 //------------------REACT ROUTER------------------//
 app.use('*', (req: Request, res: Response, next: NextFunction) => {
-  const defaultErr = {
-    status: 404, 
-    message: { err: 'Page not found' },
-  };
-  return res.status(200).sendFile(path.resolve(__dirname, '../dist/index.html'));
+  return res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
 
@@ -50,6 +45,7 @@ app.use((err: ServerError, req: Request, res: Response, next: NextFunction) => {
   }
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
+  console.log(err);
   return res.status(errorObj.status).json(errorObj.message);
 })
 
