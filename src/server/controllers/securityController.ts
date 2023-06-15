@@ -8,7 +8,7 @@ const securityController = {
     try {
 
       // define command to run in terminal
-      // ----------------> NEED TO FIGURE OUT WHAT CIST YAML PATH IS <---------------- //
+      // ----------------> NEED TO FIGURE OUT WHAT CIS YAML PATH IS <---------------- //
       const command = 'minikube ssh -- kube-bench run --config <cis_yaml_path> --ouput json';
 
       // execute command in terminal with exec
