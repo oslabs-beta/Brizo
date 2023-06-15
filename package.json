@@ -11,6 +11,9 @@
   "dependencies": {
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
+    "@kubernetes/client-node": "^0.18.1",
+    "child_process": "^1.0.2",
+    "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "node": "^20.2.0",
     "path": "^0.12.7",
