@@ -18,7 +18,7 @@ const app = express();
 
 // parse requests 
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, '../dist')));
+app.use(express.static(path.resolve(__dirname, '../client')));
 
 // set up api router
 app.use('/api', apiRouter);
@@ -26,11 +26,7 @@ app.use('/api', apiRouter);
 
 //------------------REACT ROUTER------------------//
 app.use('*', (req: Request, res: Response, next: NextFunction) => {
-  const defaultErr = {
-    status: 404, 
-    message: { err: 'Page not found' },
-  };
-  return res.status(200).sendFile(path.resolve(__dirname, '../dist/index.html'));
+  return res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
 
