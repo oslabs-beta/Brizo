@@ -2,7 +2,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { ServerError } from '../../types';
 import apiRouter from '../server/routers/apiRouter';
-
 //------------------REQUIRES------------------//
 // require path & cors
 const path = require('path');
@@ -46,6 +45,7 @@ app.use((err: ServerError, req: Request, res: Response, next: NextFunction) => {
   }
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
+  console.log(err);
   return res.status(errorObj.status).json(errorObj.message);
 })
 
