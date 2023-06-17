@@ -5,13 +5,14 @@
     "module": "commonjs",
     "outDir": "dist",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node"
   },
   "include": [
-    "src/server"
+    "src"
   ],
   "exclude": [
-    "src/client",
     "dist",
     "node_modules"
   ]
