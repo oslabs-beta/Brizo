@@ -88,7 +88,7 @@ const securityController = {
 
               // initialize index variables to slice sections from testLines
               let cpsctStart: number = 0;
-              let cpsctEnd: number = 0;
+              let cpsctEnd: number = 61;
 
               // isolate test results by section
               for (let index = 0; index < testLines.length; index += 1) {
@@ -103,9 +103,10 @@ const securityController = {
                   testLines[0][index].includes('1.4.1')) {
                   cpsctEnd = index;
                   console.log('HERE');
+                  // WHY DO I NEVER ENTER THIS CONDITIONAL BLOCK?
               }
               }
-              console.log(cpsctStart, cpsctEnd);
+              res.locals.cpsctArr = testLines.slice(cpsctStart, cpsctEnd);
               const controlPlaneSecurityConfigurationTests: Object = {
                 controlPlaneNodeConfigFiles: testLines
               }
