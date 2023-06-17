@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { clusterControllerType } from '../../../types';
+const os = require('os');
 
-// file path import from .env
-require('dotenv').config();
-const KUBE_FILE_PATH = process.env.KUBE_FILE_PATH;
+
+const KUBE_FILE_PATH = `${os.homedir()}/.kube/config`;
 
 // declare k8s client node
 const k8s = require('@kubernetes/client-node');
