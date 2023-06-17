@@ -1,7 +1,7 @@
 //------------------TYPESCRIPT IMPORTS------------------//
 import express, { Request, Response, NextFunction } from 'express';
 import { ServerError } from '../../types';
-import apiRouter from '../server/routers/apiRouter';
+// import apiRouter from '../server/routers/apiRouter';
 //------------------REQUIRES------------------//
 // require path & cors
 const path = require('path');
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../client')));
 
 // set up api router
-app.use('/api', apiRouter);
+// app.use('/api', apiRouter);
 
 
 //------------------REACT ROUTER------------------//
