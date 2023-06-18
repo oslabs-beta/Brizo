@@ -17,7 +17,7 @@ export type indexObjectType = {
 
 export type sectionResultsInfo = {
   testResults: String[],
-  // remediations: String[][],
+  remediations: String[],
   summary: String[]
 }
 

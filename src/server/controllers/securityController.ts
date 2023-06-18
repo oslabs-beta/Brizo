@@ -272,38 +272,61 @@ const securityController = {
         cpsctStart.position,
         cpsctEnd.position + 1
       ),
+      remediations: outputData.slice(
+        outputData.indexOf('== Remediations master =='),
+        outputData.indexOf('== Summary master ==')
+      ),
       summary: outputData.slice(
         outputData.indexOf('== Summary master =='),
         outputData.indexOf('== Summary master ==') + 5
       ),
     };
-    // console.log(controlPlaneSecurityConfiguration.summary);
+
     const etcdNodeConfiguration: sectionResultsInfo = {
       testResults: allTestResults.slice(encStart.position, encEnd.position + 1),
+      remediations: outputData.slice(
+        outputData.indexOf('== Remediations etcd =='),
+        outputData.indexOf('== Summary etcd ==')
+      ),
       summary: outputData.slice(
         outputData.indexOf('== Summary etcd =='),
         outputData.indexOf('== Summary etcd ==') + 5
       ),
     };
+
     const controlPlaneConfiguration: sectionResultsInfo = {
       testResults: allTestResults.slice(cpcStart.position, cpcEnd.position + 1),
+      remediations: outputData.slice(
+        outputData.indexOf('== Remediations controlplane =='),
+        outputData.indexOf('== Summary controlplane ==')
+      ),
       summary: outputData.slice(
         outputData.indexOf('== Summary controlplane =='),
         outputData.indexOf('== Summary controlplane ==') + 5
       ),
     };
+
     const workerNodeSecurity: sectionResultsInfo = {
       testResults: allTestResults.slice(
         wnscStart.position,
         wnscEnd.position + 1
+      ),
+      remediations: outputData.slice(
+        outputData.indexOf('== Remediations node =='),
+        outputData.indexOf('== Summary node ==')
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary node =='),
         outputData.indexOf('== Summary node ==') + 5
       ),
     };
+
     const kubernetesPolicies: sectionResultsInfo = {
       testResults: allTestResults.slice(kpStart.position, kpEnd.position + 1),
+      remediations: outputData.slice(
+        outputData.indexOf('== Remediations policies =='),
+        outputData.indexOf('== Summary policies ==')
+      ),
       summary: outputData.slice(
         outputData.indexOf('== Summary policies =='),
         outputData.indexOf('== Summary policies ==') + 5
@@ -324,7 +347,7 @@ const securityController = {
       kubernetesPolicies,
       totalSummary,
     };
-    console.log(allTestInfo);
+
     return allTestInfo;
   },
 };
