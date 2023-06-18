@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/cis', 
   securityController.runKubeBench,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.cpsctArr);
+    res.status(200).json(res.locals.allTestInfo);
   }
 )
 
