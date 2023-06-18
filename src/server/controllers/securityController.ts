@@ -9,12 +9,10 @@ import { sectionResultsInfo } from '../../../types';
 import { testResultsObjectType } from '../../../types';
 
 const securityController = {
+  // this method runs kube bench tool for cis testing
   runKubeBench: async (req: Request, res: Response, next: NextFunction) => {
     try {
       // define command to run in terminal
-      // ----------------> NEED TO FIGURE OUT WHAT CIS YAML PATH IS <---------------- //
-      // const command = 'minikube ssh -- kube-bench run --config <cis_yaml_path> --ouput json';
-
       // apply job.yaml file to run tests as a Kubernetes job/POD
       const command = 'kubectl apply -f tests/cis/job.yaml';
 
@@ -57,7 +55,8 @@ const securityController = {
               } else console.log('Output file written successfully.');
             });
 
-            // store output text file in const
+            // grab output.txt and parse it with helper function 
+            // this way we can send data in meaningful chunks to front end
             fs.readFile('output.txt', 'utf-8', (error, data) => {
               if (error) {
                 return next({ error: 'Error reading output file.' });
@@ -66,19 +65,14 @@ const securityController = {
 
               // split data file into array of lines and store it in outputLines const
               const outputLines = data.split('\n');
-              // console.log(outputLines);
-              // // convert text data to JSON format
-              // const jsonOutputLines = outputLines.map((line) => {
-              //   const [key] = line.split(':');
-              //   return [key];
-              // });
-              // console.log(jsonOutputLines);
+
               // invoke parseDataOutput function and pass in jsonOutputLines array
               const allTestInfo =
                 securityController.parseOutputData(outputLines);
-              // const parsedResults = JSON.parse(allTestInfo);
-              // console.log(allTestInfo);
+
+              // store the parsed data on res.locals 
               res.locals.allTestInfo = allTestInfo;
+
               // move to next middleware
               return next();
             });
@@ -92,6 +86,7 @@ const securityController = {
     }
   },
 
+  // helper function to parse the data produced by kube bench
   parseOutputData: (outputData: String[]) => {
     // initialize test results array
     const allTestResults: String[] = [];
@@ -106,7 +101,6 @@ const securityController = {
         allTestResults.push(line);
       }
     });
-    // console.log(allTestResults);
 
     // initialize index variables to slice sections from testLines
     // initialize outside of for loop so we can access for object assignment below
@@ -338,7 +332,7 @@ const securityController = {
       outputData.indexOf('== Summary total ==') + 5
     );
 
-    // create all test info object to return to front end
+    // create all test info object to return to runKubeBench to be sent to front end 
     const allTestInfo: testResultsObjectType = {
       controlPlaneSecurityConfiguration,
       etcdNodeConfiguration,
