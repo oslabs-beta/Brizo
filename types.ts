@@ -29,3 +29,13 @@ export type testResultsObjectType = {
   kubernetesPolicies: sectionResultsInfo,
   totalSummary: String[]
 }
+
+export type namespaceMapObjectType = {
+  metadata: {
+    name: String,
+    uid: String
+  },
+  status: {
+    phase: String
+  }
+}

@@ -12,6 +12,15 @@ router.get(
   }
 );
 
+// get request for node list
+router.get(
+  '/node/:namespace', 
+  clusterController.getNodes,
+  (req: Request, res: Response) => {
+    res.status(200).json(res.locals.nodeList);
+  }
+);
+
 // get request for pod list
 router.get(
   '/pod/:namespace', 
@@ -22,13 +31,5 @@ router.get(
 );
 
 
-// get request for node list
-router.get(
-  '/node/:namespace', 
-  clusterController.getNodes,
-  (req: Request, res: Response) => {
-    res.status(200).json(res.locals.nodeList);
-  }
-);
 
 export default router;
