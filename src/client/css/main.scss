@@ -1,0 +1,12 @@
+$mainColor: #102E44;
+$lighterMainColor: #1A4260;
+$darkTextColor: #3C3C3C;
+$lightTextColor: #F1FEFA;
+$accentColor: #B2FCFB;
+
+body {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  background-color: $lighterMainColor;
+}

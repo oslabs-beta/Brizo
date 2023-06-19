@@ -2,7 +2,9 @@ import React from 'react'
 
 const StructureOverview = () => {
   return (
-    <div>StructureOverview</div>
+    <div>StructureOverview
+          <button>ello world</button>
+    </div>
   )
 }
 
