@@ -21,8 +21,13 @@ body {
 button {
   margin: 0;
   border: none;
+  transition: 100ms ease-in-out;
   &:hover {
+    transform: translateY(-3px);
     box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.5) // animate
+  }
+  &:active {
+    transform: translateZ(100px);
   }
   &.primary-button {
     background-color: $accentColor;
@@ -100,4 +105,15 @@ footer {
 
 .test-dropdown { // remove when finished
   width: 30%;
+}
+
+// ! ANIMATIONS !
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
