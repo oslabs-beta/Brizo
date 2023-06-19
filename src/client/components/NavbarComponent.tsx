@@ -14,7 +14,8 @@ export default function NavbarComponent() {
       <div>
           <button className='secondary-button'>brizo logo</button>
         <button onClick={() => navigateTo('/')} className='primary-button'>structure</button>
-        <button onClick={() => navigateTo('/metrics')} className='primary-button'>metrics</button>
+          <button onClick={() => navigateTo('/namespace')} className='primary-button'>namespace metrics</button>
+          <button onClick={() => navigateTo('/cluster')} className='primary-button'>cluster metrics</button>
         </div>
       <div>
         <button onClick={() => refreshPage()} className='refresh-button'>

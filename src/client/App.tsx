@@ -1,7 +1,8 @@
 import React from 'react';
 import { Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
-import StructureOverview from './components/StructureOverview';
-import MetricsOverview from './components/MetricsOverview';
+import ViewStructure from './components/ViewStructure';
+import ViewNamespace from './components/ViewNamespace';
+import ViewCluster from './components/ViewCluster';
 import MainContainer from './components/MainContainer';
 
 const router = createBrowserRouter([
@@ -11,11 +12,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <StructureOverview />,
+        element: <ViewStructure />,
       },
       {
-        path: '/metrics',
-        element: <MetricsOverview />
+        path: '/namespace',
+        element: <ViewNamespace />
+      },
+      {
+        path: '/cluster',
+        element: <ViewCluster />
       },
     ]
   }
