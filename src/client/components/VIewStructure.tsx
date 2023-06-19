@@ -4,7 +4,7 @@ import NamespaceComponent from './NamespaceComponent';
 // TODO: add scrolling for multiple cards
 // TODO: generate cards on # of namespaces
 // TODO: define card width on # of namespaces
-const StructureOverview = () => {
+const ViewStructure = () => {
   return (
     <>
     <div>
@@ -34,4 +34,4 @@ const StructureOverview = () => {
   )
 }
 
-export default StructureOverview
+export default ViewStructure
