@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { clusterControllerType } from '../../../types';
+import { namespaceMapObjectType } from '../../../types';
+
 const os = require('os');
 
 
@@ -45,7 +47,7 @@ const clusterController: clusterControllerType = {
   },
 
   getNodes: async (req: Request, res: Response, next: NextFunction) => {
-    
+    console.log(req.params);
     // destructure namespace from request params
     const { namespace } = req.params;
 
@@ -75,7 +77,17 @@ const clusterController: clusterControllerType = {
     try {
 
       // fetch list of namespaces from k8s api
-      const namespaceList = await k8sApi.listNamespace();
+      const namespaceData = await k8sApi.listNamespace();
+
+      // iterate through data and isolate namespace name, uid, and status for each namespace
+      const namespaceList = namespaceData.body.items.map((namespace: namespaceMapObjectType) => {
+        return {
+          name: namespace.metadata.name,
+          uid: namespace.metadata.uid,
+          status: namespace.status.phase
+        }
+      });
+
 
       // store namespace list on res.locals
       res.locals.namespaceList = namespaceList;
