@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import StructureOverview from './components/StructureOverview';
+import MetricsOverview from './components/MetricsOverview';
 import MainContainer from './components/MainContainer';
 
 const router = createBrowserRouter([
@@ -9,8 +10,12 @@ const router = createBrowserRouter([
     element: <MainContainer />,
     children: [
       {
-        path: '/structure',
+        path: '/',
         element: <StructureOverview />,
+      },
+      {
+        path: '/metrics',
+        element: <MetricsOverview />
       },
     ]
   }
