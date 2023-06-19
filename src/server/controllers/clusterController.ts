@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { clusterControllerType } from '../../../types';
-import { namespaceMapObjectType } from '../../../types';
+import { namespaceMapType } from '../../../types';
 
 const os = require('os');
 
@@ -80,7 +80,7 @@ const clusterController: clusterControllerType = {
       const namespaceData = await k8sApi.listNamespace();
 
       // iterate through data and isolate namespace name, uid, and status for each namespace
-      const namespaceList = namespaceData.body.items.map((namespace: namespaceMapObjectType) => {
+      const namespaceList = namespaceData.body.items.map((namespace: namespaceMapType) => {
         return {
           name: namespace.metadata.name,
           uid: namespace.metadata.uid,

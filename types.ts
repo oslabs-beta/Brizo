@@ -30,7 +30,7 @@ export type testResultsObjectType = {
   totalSummary: String[]
 }
 
-export type namespaceMapObjectType = {
+export type namespaceMapType = {
   metadata: {
     name: String,
     uid: String
@@ -39,3 +39,15 @@ export type namespaceMapObjectType = {
     phase: String
   }
 }
+
+// export type podlistMapType {
+//   metadata: {
+
+//   },
+//   spec: {
+
+//   },
+//   status: {
+
+//   }
+// }
