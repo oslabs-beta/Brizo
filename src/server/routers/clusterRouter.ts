@@ -1,11 +1,17 @@
-import express, { Express, Request, Response, ErrorRequestHandler, NextFunction } from 'express';
+import express, {
+  Express,
+  Request,
+  Response,
+  ErrorRequestHandler,
+  NextFunction,
+} from 'express';
 import clusterController from '../controllers/clusterController';
 
 const router = express.Router();
 
 // get request for namespace list
 router.get(
-  '/namespaces', 
+  '/namespaces',
   clusterController.getNamespaces,
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.namespaceList);
@@ -14,7 +20,7 @@ router.get(
 
 // get request for node list
 router.get(
-  '/node/:namespace', 
+  '/node/:namespace',
   clusterController.getNodes,
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.nodeList);
@@ -23,13 +29,11 @@ router.get(
 
 // get request for pod list
 router.get(
-  '/pod/:namespace', 
+  '/pod/:namespace',
   clusterController.getPods,
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.podList);
   }
 );
-
-
 
 export default router;
