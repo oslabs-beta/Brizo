@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+// import { BrowserRouter, Route } from 'react-router-dom';
 import ViewStructure from './components/ViewStructure';
 import ViewNamespace from './components/ViewNamespace';
 import ViewCluster from './components/ViewCluster';
@@ -30,6 +31,6 @@ const App = () => {
   return (
     <RouterProvider router={router}></RouterProvider>
   )
-}
+};
 
 export default App
