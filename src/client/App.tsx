@@ -1,10 +1,15 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-// import { BrowserRouter, Route } from 'react-router-dom';
 import ViewStructure from './components/ViewStructure';
 import ViewNamespace from './components/ViewNamespace';
 import ViewCluster from './components/ViewCluster';
 import MainContainer from './components/MainContainer';
+
+/**
+ * MainContainer: The root for the browser router.
+ * Children: Components that will be displayed where the <Outlet> component is
+ * provided.
+ */
 
 const router = createBrowserRouter([
   {

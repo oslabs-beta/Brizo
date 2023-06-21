@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+/**
+ * NavbarComponent: Contains all of the buttons and navigation logic.
+ * By utilizing the useNavigate hook, we're able to navigate throughout our
+ * single page application while maintaining our "history".
+ */
 export default function NavbarComponent() {
   const navigateTo = useNavigate();
  
