@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { clusterControllerType, namespaceMapType, podObject, podListByNode, nodeObject, nodeObjectList } from '../../../types';
+import { clusterControllerType, namespaceMapType, podObject, podListByNode, nodeObject, nodeObjectList, newNodeObject } from '../../../types';
 
 
 const os = require('os');
@@ -78,8 +78,24 @@ const clusterController: clusterControllerType = {
       const nodeObjectList: nodeObjectList = {};
 
       nodeList.forEach(node => {
+        const uid = node.metadata.uid;
+        const podCIDRs = node.spec.podCIDRs;
+        const addresses = node.status.addresses;
+        const allocatable = node.status.allocatable;
+        const capacity = node.status.capacity;
+        const images = node.status.images;
+
+        const nodeObject: newNodeObject = {
+          uid: uid,
+          podCIDRs: podCIDRs,
+          addresses: addresses,
+          allocatable: allocatable,
+          capacity: capacity,
+          images: images
+        };
+
         const nodeName = node.metadata.name;
-          nodeObjectList[nodeName] = node;
+          nodeObjectList[nodeName] = nodeObject;
       });
       // store node list on res.locals
       res.locals.nodeObjectList = nodeObjectList;

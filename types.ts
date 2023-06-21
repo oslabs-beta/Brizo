@@ -285,6 +285,36 @@ export type nodeObject = {
   };
 };
 
+export type newNodeObject = {
+  uid: string,
+  podCIDRs: string[],
+  addresses: object[],
+  allocatable: {
+    cpu: string,
+    'ephemeral-storage': string,
+    'hugepages-1Gi': string,
+    'hugepages-2Mi': string,
+    'hugepages-32Mi': string,
+    'hugepages-64Ki': string,
+    memory: string,
+    pods: string
+  },
+  capacity: {
+    cpu: string,
+    'ephemeral-storage': string,
+    'hugepages-1Gi': string,
+    'hugepages-2Mi': string,
+    'hugepages-32Mi': string,
+    'hugepages-64Ki': string,
+    memory: string,
+    pods: string
+  },
+  images: {
+    names: string[],
+    sizeBytes: number
+  }[]
+}
+
 export type nodeObjectList = {
-  [nodeName: string] : nodeObject
+  [nodeName: string] : newNodeObject
 }
