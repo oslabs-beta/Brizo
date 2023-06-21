@@ -1,7 +1,4 @@
-import express, {
-  Request,
-  Response,
-} from 'express';
+import express, { Request, Response } from 'express';
 import clusterController from '../controllers/clusterController';
 
 const router = express.Router();
@@ -20,7 +17,7 @@ router.get(
   '/node/:namespace',
   clusterController.getNodes,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.nodeObjectList);
+    res.status(200).json(res.locals.filteredNodeList);
   }
 );
 
@@ -29,7 +26,7 @@ router.get(
   '/pod/:namespace',
   clusterController.getPods,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.podListByNode);
+    res.status(200).json(res.locals.filteredPodList);
   }
 );
 

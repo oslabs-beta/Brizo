@@ -1,6 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
-import { clusterControllerType, namespaceMapType, podObject, podListByNode, nodeObject, nodeObjectList, newNodeObject } from '../../../types';
-
+import {
+  clusterControllerType,
+  newPodObject,
+  namespaceMapType,
+  podObject,
+  podListByNode,
+  nodeObject,
+  nodeObjectList,
+  newNodeObject,
+} from '../../../types';
 
 const os = require('os');
 
@@ -31,28 +39,36 @@ const clusterController: clusterControllerType = {
       const podList: podObject[] = result.body.items;
 
       // initialize pod list by node object as empty {}
-      const podListByNode: podListByNode = {};
+      const filteredPodList: newPodObject[] = [];
 
-      // iterate over podList 
-      podList.forEach(pod => {
-        // decalre nodeName and podName
+      // iterate over podList
+      podList.forEach((pod) => {
+        // declare values for new filtered pod object
         const nodeName = pod.spec.nodeName;
         const podName = pod.metadata.name;
+        const uid = pod.metadata.uid;
+        const containers = pod.spec.containers;
+        const hostIP = pod.status.hostIP;
+        const phase = pod.status.phase;
+        const podIPs = pod.status.podIPs;
 
-        // check if nodeName does not already exist on podListByNode object
-        if (!podListByNode[nodeName]) {
-          // assign empty object to the new node name
-          podListByNode[nodeName] = {};
-        }
-        // assign pod object as value at key of podName for the given node
-        podListByNode[nodeName][podName] = pod;
+        // create new filtered pod object
+        const podObject: newPodObject = {
+          nodeName: nodeName,
+          podName: podName,
+          uid: uid,
+          containers: containers,
+          hostIP: hostIP,
+          phase: phase,
+          podIPs: podIPs,
+        };
+
+        // push new filtered pod object to filtered pod list
+        filteredPodList.push(podObject);
       });
 
-      // save podListByNode to res.locals
-      // this is an object with node names as keys 
-        // each node name key is an object with pod names as keys
-          // each pod name key is an object with the pod object info as its value 
-      res.locals.podListByNode = podListByNode;
+      // save filteredPodList to res.locals
+      res.locals.filteredPodList = filteredPodList;
 
       // move to next middleware
       return next();
@@ -64,7 +80,6 @@ const clusterController: clusterControllerType = {
   },
 
   getNodes: async (req: Request, res: Response, next: NextFunction) => {
-
     // destructure namespace from request params
     const { namespace } = req.params;
 
@@ -75,9 +90,13 @@ const clusterController: clusterControllerType = {
       // extract list of nodes from result body
       const nodeList: nodeObject[] = result.body.items;
 
-      const nodeObjectList: nodeObjectList = {};
+      // initialize filteredNodeList array
+      const filteredNodeList: newNodeObject[] = [];
 
-      nodeList.forEach(node => {
+      // iterate over nodeList
+      nodeList.forEach((node) => {
+        // declare variables to be assigned to new filtered node object
+        const name = node.metadata.name;
         const uid = node.metadata.uid;
         const podCIDRs = node.spec.podCIDRs;
         const addresses = node.status.addresses;
@@ -85,20 +104,23 @@ const clusterController: clusterControllerType = {
         const capacity = node.status.capacity;
         const images = node.status.images;
 
+        // create new filtered node object
         const nodeObject: newNodeObject = {
+          name: name,
           uid: uid,
           podCIDRs: podCIDRs,
           addresses: addresses,
           allocatable: allocatable,
           capacity: capacity,
-          images: images
+          images: images,
         };
 
-        const nodeName = node.metadata.name;
-          nodeObjectList[nodeName] = nodeObject;
+        // push new filtered node object to filteredNodeList
+        filteredNodeList.push(nodeObject);
       });
-      // store node list on res.locals
-      res.locals.nodeObjectList = nodeObjectList;
+
+      // store filtered node list on res.locals
+      res.locals.filteredNodeList = filteredNodeList;
 
       // move to next middleware
       return next();
