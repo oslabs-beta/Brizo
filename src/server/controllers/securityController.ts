@@ -1,92 +1,133 @@
 import { Request, Response, NextFunction } from 'express';
 import { exec } from 'child_process';
-import { json } from 'stream/consumers';
 import fs from 'fs';
 
 // type imports
-import { indexObjectType } from '../../../types';
-import { sectionResultsInfo } from '../../../types';
-import { testResultsObjectType } from '../../../types';
+import {
+  indexObjectType,
+  sectionResultsInfo,
+  testResultsObjectType,
+} from '../../../types';
 
 const securityController = {
-  // this method runs kube bench tool for cis testing
-  runKubeBench: async (req: Request, res: Response, next: NextFunction) => {
+  // this method runs kube bench tool for cis testing, writes the log to output.text, and sends the info to the front end
+  runKubeBench: async (res: Response, next: NextFunction) => {
     try {
-      // define command to run in terminal
-      // apply job.yaml file to run tests as a Kubernetes job/POD
-      const command = 'kubectl apply -f tests/cis/job.yaml';
+      // create kube bench job
+      await securityController.applyKubeBenchJob(next);
 
-      // execute command in terminal with exec
-      exec(command, (error, stdout, stderr) => {
-        // check for error
-        if (error) {
-          return next(error);
-        }
+      // get pod name of kube bench job
+      const podName: string = await securityController.getKubeBenchPodName();
 
-        // get name of kube bench pod to access the logged test results
-        const getPodNameCommand =
-          'kubectl get pods -l job-name=kube-bench -o=jsonpath="{.items[0].metadata.name}"';
+      // grab the log of the kube bench pod
+      const kubeBenchOutput = await securityController.getKubeBenchPodLog(
+        podName
+      );
 
-        // execute command in terminal with exec
-        exec(getPodNameCommand, (error, stdout, stderr) => {
-          if (error) {
-            return next(error);
-          }
+      // write kube bench pod log to output.txt
+      securityController.writeOutputData(kubeBenchOutput, next);
 
-          // trim output, do not parse yet so we can use it in the next command as a string
-          const podName = stdout.trim();
+      // parse kube bench pod log data before sending to front end
+      const allTestInfo = await securityController.parseOutputData(
+        kubeBenchOutput.split('\n')
+      );
 
-          // get log of kube bench pod to view testing results
-          const podLogCommand = `kubectl logs ${podName}`;
+      // save parsed kube bench pod log data on res.locals
+      res.locals.allTestInfo = allTestInfo;
 
-          // execute command in terminal with exec
-          exec(podLogCommand, (error, stdout, stderr) => {
-            if (error) {
-              return next(error);
-            }
-
-            // trim output and store in variable
-            const kubeBenchOutput = stdout.trim();
-
-            // write kubeBenchOutput to output.txt file
-            fs.writeFile('output.txt', kubeBenchOutput, (error) => {
-              if (error) {
-                return next({ error: 'Error writing to output file.' });
-              } else console.log('Output file written successfully.');
-            });
-
-            // grab output.txt and parse it with helper function 
-            // this way we can send data in meaningful chunks to front end
-            fs.readFile('output.txt', 'utf-8', (error, data) => {
-              if (error) {
-                return next({ error: 'Error reading output file.' });
-              }
-              console.log('Output file read successfully.');
-
-              // split data file into array of lines and store it in outputLines const
-              const outputLines = data.split('\n');
-
-              // invoke parseDataOutput function and pass in jsonOutputLines array
-              const allTestInfo =
-                securityController.parseOutputData(outputLines);
-
-              // store the parsed data on res.locals 
-              res.locals.allTestInfo = allTestInfo;
-
-              // move to next middleware
-              return next();
-            });
-          });
-        });
-      });
+      // move to next middleware
+      return next();
     } catch (error) {
       // error handling
-      console.log('Error running kube bench.');
       return next(error);
     }
   },
 
-  // helper function to parse the data produced by kube bench
+  // method to apply job
+  applyKubeBenchJob: async (next: NextFunction) => {
+    // define command to create kube bench test as a job
+    const command = 'kubectl apply -f tests/cis/job.yaml';
+
+    // run command using exec
+    exec(command, (error) => {
+      if (error) {
+        // error handling
+        console.log('Error applying kube bench job.');
+        return next(error);
+      }
+
+      // return out of function once job is created
+      return;
+    });
+  },
+
+  // method to get pod name
+  getKubeBenchPodName: async () => {
+    // return a promise of type string for grabbing the pod log later
+    return new Promise<string>((resolve, reject) => {
+      // define command to find the kube bench pod name
+      const command =
+        'kubectl get pods -l job-name=kube-bench -o=jsonpath="{.items[0].metadata.name}"';
+
+      // run command with exec
+      exec(command, (error, stdout) => {
+        if (error) {
+          // error handling
+          console.log('Error getting kube bench pod name.');
+          // change state of promise to 'rejected' and pass in the reason (error)
+          reject(error);
+        }
+
+        // trim whitespace from pod name string
+        const podName = stdout.trim();
+
+        // change state of promise to 'fulfilled' and pass in the fulfillment value (podName)
+        resolve(podName);
+      });
+    });
+  },
+
+  // method to get pod log
+  getKubeBenchPodLog: async (podName: string) => {
+    // return a promise of type string which will be the log of the kube bench pod
+    return new Promise<string>((resolve, reject) => {
+      // define command to display kube bench pod log
+      const command = `kubectl logs ${podName}`;
+
+      // run command with exec
+      exec(command, (error, stdout) => {
+        if (error) {
+          // error handling
+          console.log('Error getting kube bench pod log.');
+          // change state of promise to 'rejected' and pass in reason (error)
+          reject(error);
+        }
+
+        // trim whitespace from output
+        const kubeBenchOutput = stdout.trim();
+
+        // change state of promise to 'fulfilled' and pass in fulfillment value (kubeBenchOutput)
+        resolve(kubeBenchOutput);
+      });
+    });
+  },
+
+  // method to write output.txt file
+  writeOutputData: (content: string, next: NextFunction) => {
+    // use fs to write kube bench output to output.txt
+    fs.writeFile('output.txt', content, (error) => {
+      if (error) {
+        // error handling
+        console.log('Error writing output file.');
+        return next(error);
+      }
+      console.log('Output file written successfully.');
+
+      // return out of function
+      return;
+    });
+  },
+
   parseOutputData: (outputData: String[]) => {
     // initialize test results array
     const allTestResults: String[] = [];
@@ -103,7 +144,12 @@ const securityController = {
     });
 
     // initialize index variables to slice sections from testLines
-    // initialize outside of for loop so we can access for object assignment below
+    /* initialize outside of for loop so we can access for object assignment below
+      the assigned boolean is used to make sure we find the first index and don't reassign later.
+      for example, if our first test starts with '1.1.1', it would be reassigned on test '1.1.11' later.
+      the assigned property accounts for this 
+      */
+
     // SECTION 1 INDICES
     let cpsctStart: indexObjectType = {
       position: 0,
@@ -261,14 +307,17 @@ const securityController = {
       }
     }
 
+    // create object to store testResults array, remediations array, and summary array for the given section
     const controlPlaneSecurityConfiguration: sectionResultsInfo = {
       testResults: allTestResults.slice(
         cpsctStart.position,
         cpsctEnd.position + 1
       ),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations master =='),
-        outputData.indexOf('== Summary master ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations master =='),
+          outputData.indexOf('== Summary master ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary master =='),
@@ -276,11 +325,14 @@ const securityController = {
       ),
     };
 
+    // create object to store testResults array, remediations array, and summary array for the given section
     const etcdNodeConfiguration: sectionResultsInfo = {
       testResults: allTestResults.slice(encStart.position, encEnd.position + 1),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations etcd =='),
-        outputData.indexOf('== Summary etcd ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations etcd =='),
+          outputData.indexOf('== Summary etcd ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary etcd =='),
@@ -288,11 +340,14 @@ const securityController = {
       ),
     };
 
+    // create object to store testResults array, remediations array, and summary array for the given section
     const controlPlaneConfiguration: sectionResultsInfo = {
       testResults: allTestResults.slice(cpcStart.position, cpcEnd.position + 1),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations controlplane =='),
-        outputData.indexOf('== Summary controlplane ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations controlplane =='),
+          outputData.indexOf('== Summary controlplane ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary controlplane =='),
@@ -300,14 +355,17 @@ const securityController = {
       ),
     };
 
+    // create object to store testResults array, remediations array, and summary array for the given section
     const workerNodeSecurity: sectionResultsInfo = {
       testResults: allTestResults.slice(
         wnscStart.position,
         wnscEnd.position + 1
       ),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations node =='),
-        outputData.indexOf('== Summary node ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations node =='),
+          outputData.indexOf('== Summary node ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary node =='),
@@ -315,11 +373,14 @@ const securityController = {
       ),
     };
 
+    // create object to store testResults array, remediations array, and summary array for the given section
     const kubernetesPolicies: sectionResultsInfo = {
       testResults: allTestResults.slice(kpStart.position, kpEnd.position + 1),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations policies =='),
-        outputData.indexOf('== Summary policies ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations policies =='),
+          outputData.indexOf('== Summary policies ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary policies =='),
@@ -332,7 +393,8 @@ const securityController = {
       outputData.indexOf('== Summary total ==') + 5
     );
 
-    // create all test info object to return to runKubeBench to be sent to front end 
+    // create all test info object to return to runKubeBench to be sent to front end
+    // this object stores all the objects we just created for individual sections
     const allTestInfo: testResultsObjectType = {
       controlPlaneSecurityConfiguration,
       etcdNodeConfiguration,
@@ -342,7 +404,26 @@ const securityController = {
       totalSummary,
     };
 
+    // return allTestInfo object to be sent to front end
     return allTestInfo;
+  },
+
+  condenseRemediations: (remediationsArr: String[]) => {
+    const parsedRemediations: String[] = [];
+    let combinedString: string = '';
+
+    for (let index: number = 1; index < remediationsArr.length; index += 1) {
+      if (remediationsArr[index] === '') {
+        if (combinedString !== '') {
+          parsedRemediations.push(combinedString);
+          combinedString = '';
+        }
+      } else {
+        combinedString += remediationsArr[index];
+      }
+    }
+    if (combinedString !== '') parsedRemediations.push(combinedString);
+    return parsedRemediations;
   },
 };
 
