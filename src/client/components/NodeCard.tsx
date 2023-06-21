@@ -23,7 +23,7 @@ function NodeCard(props: nodeCardProps) {
       <ul>hugepages-32Mi: {allocatable['hugepages-32Mi']} / {capacity['hugepages-32Mi']} | hugepages-64Ki: {allocatable['hugepages-64Ki']} / {capacity['hugepages-64Ki']}</ul>
       <ul>memory: {convertKiToGB(allocatable['memory'])}GB / {convertKiToGB(capacity['memory'])}GB | pods: {allocatable['pods']} / {capacity['pods']}</ul>
       <ul>images:</ul>
-      {imageList}
+      <div className='image-scrollbox'>{imageList}</div>
     </div>
   )
 }
