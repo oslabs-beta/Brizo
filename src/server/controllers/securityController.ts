@@ -11,7 +11,7 @@ import {
 
 const securityController = {
   // this method runs kube bench tool for cis testing, writes the log to output.text, and sends the info to the front end
-  runKubeBench: async (res: Response, next: NextFunction) => {
+  runKubeBench: async (req: Request, res: Response, next: NextFunction) => {
     try {
       // create kube bench job
       await securityController.applyKubeBenchJob(next);
