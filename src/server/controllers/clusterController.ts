@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { clusterControllerType } from '../../../types';
-import { namespaceMapType } from '../../../types';
+import { clusterControllerType, namespaceMapType, podObject, podListByNode, nodeObject, nodeObjectList } from '../../../types';
+
 
 const os = require('os');
 
@@ -27,11 +27,32 @@ const clusterController: clusterControllerType = {
       // fetch pods from k8s api for given namespace
       const result = await k8sApi.listNamespacedPod(namespace);
 
-      // extract list of pods from result
-      const podList = result.body.items;
+      // extract list of pod objects from result
+      const podList: podObject[] = result.body.items;
 
-      // save list of pods on res.locals
-      res.locals.podList = podList;
+      // initialize pod list by node object as empty {}
+      const podListByNode: podListByNode = {};
+
+      // iterate over podList 
+      podList.forEach(pod => {
+        // decalre nodeName and podName
+        const nodeName = pod.spec.nodeName;
+        const podName = pod.metadata.name;
+
+        // check if nodeName does not already exist on podListByNode object
+        if (!podListByNode[nodeName]) {
+          // assign empty object to the new node name
+          podListByNode[nodeName] = {};
+        }
+        // assign pod object as value at key of podName for the given node
+        podListByNode[nodeName][podName] = pod;
+      });
+
+      // save podListByNode to res.locals
+      // this is an object with node names as keys 
+        // each node name key is an object with pod names as keys
+          // each pod name key is an object with the pod object info as its value 
+      res.locals.podListByNode = podListByNode;
 
       // move to next middleware
       return next();
@@ -43,7 +64,7 @@ const clusterController: clusterControllerType = {
   },
 
   getNodes: async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.params);
+
     // destructure namespace from request params
     const { namespace } = req.params;
 
@@ -52,10 +73,16 @@ const clusterController: clusterControllerType = {
       const result = await k8sApi.listNode(namespace);
 
       // extract list of nodes from result body
-      const nodeList = result.body;
+      const nodeList: nodeObject[] = result.body.items;
 
+      const nodeObjectList: nodeObjectList = {};
+
+      nodeList.forEach(node => {
+        const nodeName = node.metadata.name;
+          nodeObjectList[nodeName] = node;
+      });
       // store node list on res.locals
-      res.locals.nodeList = nodeList;
+      res.locals.nodeObjectList = nodeObjectList;
 
       // move to next middleware
       return next();

@@ -3,27 +3,25 @@ import { exec } from 'child_process';
 import fs from 'fs';
 
 // type imports
-import { indexObjectType } from '../../../types';
-import { sectionResultsInfo } from '../../../types';
-import { testResultsObjectType } from '../../../types';
+import {
+  indexObjectType,
+  sectionResultsInfo,
+  testResultsObjectType,
+} from '../../../types';
 
 const securityController = {
   // this method runs kube bench tool for cis testing, writes the log to output.text, and sends the info to the front end
-  runKubeBench: async (req: Request, res: Response, next: NextFunction) => {
+  runKubeBench: async (res: Response, next: NextFunction) => {
     try {
       // create kube bench job
-      securityController.applyKubeBenchJob(next);
+      await securityController.applyKubeBenchJob(next);
 
       // get pod name of kube bench job
-      const podName: string = await securityController.getKubeBenchPodName(
-        next
-      );
+      const podName: string = await securityController.getKubeBenchPodName();
 
       // grab the log of the kube bench pod
       const kubeBenchOutput = await securityController.getKubeBenchPodLog(
-        podName,
-        res,
-        next
+        podName
       );
 
       // write kube bench pod log to output.txt
@@ -31,8 +29,7 @@ const securityController = {
 
       // parse kube bench pod log data before sending to front end
       const allTestInfo = await securityController.parseOutputData(
-        kubeBenchOutput.split('\n'),
-        next
+        kubeBenchOutput.split('\n')
       );
 
       // save parsed kube bench pod log data on res.locals
@@ -52,7 +49,7 @@ const securityController = {
     const command = 'kubectl apply -f tests/cis/job.yaml';
 
     // run command using exec
-    exec(command, (error, stdout, stderr) => {
+    exec(command, (error) => {
       if (error) {
         // error handling
         console.log('Error applying kube bench job.');
@@ -65,7 +62,7 @@ const securityController = {
   },
 
   // method to get pod name
-  getKubeBenchPodName: async (next: NextFunction) => {
+  getKubeBenchPodName: async () => {
     // return a promise of type string for grabbing the pod log later
     return new Promise<string>((resolve, reject) => {
       // define command to find the kube bench pod name
@@ -73,7 +70,7 @@ const securityController = {
         'kubectl get pods -l job-name=kube-bench -o=jsonpath="{.items[0].metadata.name}"';
 
       // run command with exec
-      exec(command, (error, stdout, stderr) => {
+      exec(command, (error, stdout) => {
         if (error) {
           // error handling
           console.log('Error getting kube bench pod name.');
@@ -91,18 +88,14 @@ const securityController = {
   },
 
   // method to get pod log
-  getKubeBenchPodLog: async (
-    podName: string,
-    res: Response,
-    next: NextFunction
-  ) => {
+  getKubeBenchPodLog: async (podName: string) => {
     // return a promise of type string which will be the log of the kube bench pod
     return new Promise<string>((resolve, reject) => {
       // define command to display kube bench pod log
       const command = `kubectl logs ${podName}`;
 
       // run command with exec
-      exec(command, (error, stdout, stderr) => {
+      exec(command, (error, stdout) => {
         if (error) {
           // error handling
           console.log('Error getting kube bench pod log.');
@@ -135,7 +128,7 @@ const securityController = {
     });
   },
 
-  parseOutputData: (outputData: String[], next: NextFunction) => {
+  parseOutputData: (outputData: String[]) => {
     // initialize test results array
     const allTestResults: String[] = [];
 
@@ -320,9 +313,11 @@ const securityController = {
         cpsctStart.position,
         cpsctEnd.position + 1
       ),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations master =='),
-        outputData.indexOf('== Summary master ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations master =='),
+          outputData.indexOf('== Summary master ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary master =='),
@@ -333,9 +328,11 @@ const securityController = {
     // create object to store testResults array, remediations array, and summary array for the given section
     const etcdNodeConfiguration: sectionResultsInfo = {
       testResults: allTestResults.slice(encStart.position, encEnd.position + 1),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations etcd =='),
-        outputData.indexOf('== Summary etcd ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations etcd =='),
+          outputData.indexOf('== Summary etcd ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary etcd =='),
@@ -346,9 +343,11 @@ const securityController = {
     // create object to store testResults array, remediations array, and summary array for the given section
     const controlPlaneConfiguration: sectionResultsInfo = {
       testResults: allTestResults.slice(cpcStart.position, cpcEnd.position + 1),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations controlplane =='),
-        outputData.indexOf('== Summary controlplane ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations controlplane =='),
+          outputData.indexOf('== Summary controlplane ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary controlplane =='),
@@ -362,9 +361,11 @@ const securityController = {
         wnscStart.position,
         wnscEnd.position + 1
       ),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations node =='),
-        outputData.indexOf('== Summary node ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations node =='),
+          outputData.indexOf('== Summary node ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary node =='),
@@ -375,9 +376,11 @@ const securityController = {
     // create object to store testResults array, remediations array, and summary array for the given section
     const kubernetesPolicies: sectionResultsInfo = {
       testResults: allTestResults.slice(kpStart.position, kpEnd.position + 1),
-      remediations: outputData.slice(
-        outputData.indexOf('== Remediations policies =='),
-        outputData.indexOf('== Summary policies ==')
+      remediations: securityController.condenseRemediations(
+        outputData.slice(
+          outputData.indexOf('== Remediations policies =='),
+          outputData.indexOf('== Summary policies ==')
+        )
       ),
       summary: outputData.slice(
         outputData.indexOf('== Summary policies =='),
@@ -403,6 +406,24 @@ const securityController = {
 
     // return allTestInfo object to be sent to front end
     return allTestInfo;
+  },
+
+  condenseRemediations: (remediationsArr: String[]) => {
+    const parsedRemediations: String[] = [];
+    let combinedString: string = '';
+
+    for (let index: number = 1; index < remediationsArr.length; index += 1) {
+      if (remediationsArr[index] === '') {
+        if (combinedString !== '') {
+          parsedRemediations.push(combinedString);
+          combinedString = '';
+        }
+      } else {
+        combinedString += remediationsArr[index];
+      }
+    }
+    if (combinedString !== '') parsedRemediations.push(combinedString);
+    return parsedRemediations;
   },
 };
 

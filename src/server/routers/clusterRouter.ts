@@ -1,9 +1,6 @@
 import express, {
-  Express,
   Request,
   Response,
-  ErrorRequestHandler,
-  NextFunction,
 } from 'express';
 import clusterController from '../controllers/clusterController';
 
@@ -23,7 +20,7 @@ router.get(
   '/node/:namespace',
   clusterController.getNodes,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.nodeList);
+    res.status(200).json(res.locals.nodeObjectList);
   }
 );
 
@@ -32,7 +29,7 @@ router.get(
   '/pod/:namespace',
   clusterController.getPods,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.podList);
+    res.status(200).json(res.locals.podListByNode);
   }
 );
 
