@@ -164,4 +164,4 @@ length: 8
   )
 }
 
-export default ViewStructure;
+export default ViewStructure

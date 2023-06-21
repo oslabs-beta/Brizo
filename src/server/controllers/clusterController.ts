@@ -26,15 +26,9 @@ const clusterController: clusterControllerType = {
     try {
       // fetch pods from k8s api for given namespace
       const result = await k8sApi.listNamespacedPod(namespace);
-<<<<<<< HEAD
-      console.log(result)
-      // extract list of pods from result
-      const podList = result.body.items;
-=======
 
       // extract list of pod objects from result
       const podList: podObject[] = result.body.items;
->>>>>>> dev
 
       // initialize pod list by node object as empty {}
       const podListByNode: podListByNode = {};
