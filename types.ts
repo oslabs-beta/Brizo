@@ -363,8 +363,8 @@ export type nodeObject = {
       address: string;
       type: string;
     }[];
-    allocatable: allocatableObject[],
-    capacity: capacityObject[];
+    allocatable: allocatableObject,
+    capacity: capacityObject;
     conditions: {
       lastHeartbeatTime: string;
       lastTransitionTime: string;
@@ -393,8 +393,8 @@ export type newNodeObject = {
   uid: String,
   podCIDRs: String[],
   addresses: addressObject[],
-  allocatable: allocatableObject[],
-  capacity: capacityObject[],
+  allocatable: allocatableObject,
+  capacity: capacityObject,
   images: imagesObject[]
 }
 
@@ -408,25 +408,25 @@ export type addressObject = {
 }
 
 export type allocatableObject = {
-  cpu: String,
-  'ephemeral-storage': String,
+  cpu: string,
+  'ephemeral-storage': string,
   'hugepages-1Gi': String,
   'hugepages-2Mi': String,
   'hugepages-32Mi': String,
   'hugepages-64Ki': String,
-  memory: String,
-  pods: String
+  memory: string,
+  pods: string
 }
 
 export type capacityObject = {
-  cpu: String,
-  'ephemeral-storage': String,
-  'hugepages-1Gi': String,
-  'hugepages-2Mi': String,
-  'hugepages-32Mi': String,
-  'hugepages-64Ki': String,
-  memory: String,
-  pods: String
+  cpu: string,
+  'ephemeral-storage': string,
+  'hugepages-1Gi': string,
+  'hugepages-2Mi': string,
+  'hugepages-32Mi': string,
+  'hugepages-64Ki': string,
+  memory: string,
+  pods: string
 }
 
 export type nodeCardProps = {
@@ -435,8 +435,8 @@ export type nodeCardProps = {
   uid: string;
   podCIDRs: String[];
   addresses: addressObject[];
-  allocatable: allocatableObject[];
-  capacity: capacityObject[];
+  allocatable: allocatableObject;
+  capacity: capacityObject;
   images: imagesObject[];
 }
 

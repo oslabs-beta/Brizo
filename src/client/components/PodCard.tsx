@@ -1,5 +1,5 @@
 import React from 'react'
-import { podCardProps } from '../../../tests';
+import { podCardProps } from '../../../types';
 
 function PodCard(props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
