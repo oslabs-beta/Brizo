@@ -40,6 +40,12 @@ export type namespaceMapType = {
   }
 }
 
+export type namespaceObject = {
+  name: String,
+  uid: String,
+  status: String
+}
+
 export type podListByNode = {
   [nodeName: string] : {
     [podName: string]: podObject

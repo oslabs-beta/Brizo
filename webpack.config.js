@@ -19,6 +19,10 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
+      },
+      {
+        test: /\.s?css$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   },
@@ -36,7 +40,7 @@ module.exports = {
       directory: path.join(__dirname, './dist')
     },
     proxy: {
-      '/api': 'http://localhost:3000',
+      '/api': 'http://localhost:9000',
       secure: false
     }
   }
