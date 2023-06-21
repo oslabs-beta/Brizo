@@ -395,10 +395,7 @@ export type newNodeObject = {
   addresses: addressObject[],
   allocatable: allocatableObject[],
   capacity: capacityObject[],
-  images: {
-    names: String[],
-    sizeBytes: number
-  }[]
+  images: imagesObject[]
 }
 
 export type nodeObjectList = {
@@ -440,5 +437,20 @@ export type nodeCardProps = {
   addresses: addressObject[];
   allocatable: allocatableObject[];
   capacity: capacityObject[];
-  images: string;
+  images: imagesObject[];
+}
+
+export type podCardProps = {
+  nodeName: string;
+  podName: string;
+  uid: string;
+  containers: containerObject[];
+  hostIP: string;
+  phase: string;
+  podIPs: {ip: string}[]
+}
+
+export type imagesObject = {
+  names: String[],
+  sizeBytes: number
 }

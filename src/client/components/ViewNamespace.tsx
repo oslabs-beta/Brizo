@@ -2,7 +2,7 @@ import React from 'react'
 
 function ViewNamespace() {
   return (
-    <div>ViewNamespace</div>
+    <div>INSERT NAMESPACE METRIC IFRAME HERE FOR MVP</div>
   )
 }
 

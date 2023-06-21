@@ -1,9 +1,9 @@
 import React from 'react'
-import NamespaceComponent from './NamespaceComponent';
-import { useOutletContext } from 'react-router-dom';
+import NodeCard from './NodeCard';
+import PodCard from './PodCard';
 import { useNamespaces } from './MainContainer';
 import useAsyncEffect from 'use-async-effect'
-import { namespaceObject } from '../../../types';
+import { namespaceObject, newNodeObject, newPodObject } from '../../../types';
 import axios from 'axios';
 // switch to carousel instead of static cards?
 // TODO: add scrolling for multiple cards
@@ -13,6 +13,8 @@ import axios from 'axios';
 const ViewStructure = () => {
   const { namespaces, setNamespaces } = useNamespaces();
   const [namespaceButtons, setNamespaceButtons] = React.useState<JSX.Element[]>([]);
+  const [nodeCards, setNodeCards] = React.useState<JSX.Element[]>([]);
+  const [podComponents, setPodComponents] = React.useState<JSX.Element[]>([]);
 
   useAsyncEffect(async () => fetchNamespaces(), [])
 
@@ -33,23 +35,22 @@ const ViewStructure = () => {
       const response = await axios.get(`/api/cluster/pod/${selectedNamespace}`); 
       const podsData = response.data;
       console.log(podsData);
-      // await createPodComponents(podsData);
+      await createPodComponents(podsData);
     } catch (error) {
       console.error(error);
     }
   }
-
+  // FETCH NODE INFO
   const fetchNode = async (selectedNamespace: String) => {
     try {
       const response = await axios.get(`/api/cluster/node/${selectedNamespace}`); 
-      const unparsedNodeData = response.data;
-      console.log(unparsedNodeData);
-      // await createNodeComponents(nodesData);
+      const nodesData = response.data;
+      await createNodeComponents(nodesData);
+      fetchPod(selectedNamespace);
     } catch (error) {
       console.error(error);
     }
    }
-// name, uid, podCIDR, 
   // CREATE NAMESPACE COMPONENTS
   const createNamespaceComponents = (namespaceArray: namespaceObject[]) => {
     const buttons = namespaceArray.map((namespaceObject: namespaceObject, index) => (
@@ -66,10 +67,43 @@ const ViewStructure = () => {
     ));
     setNamespaceButtons(buttons);
   };
+  // CREATE NODE COMPONENTS
+  const createNodeComponents = (nodeData: newNodeObject[]) => {
+    const mappedNodes = nodeData.map((node) => {
+        return (
+        <NodeCard
+         key={`${node.name}`}
+         name={`${node.name}`}
+         uid={`${node.uid}`}
+         podCIDRs={node.podCIDRs}
+         addresses={node.addresses}
+         allocatable={node.allocatable}
+         capacity={node.capacity}
+         images={node.images}
+       />)
+    })
+    setNodeCards(mappedNodes);
+  }
 
-  // const createPodComponents = () => {
-
-  // }
+  const createPodComponents = (podData: newPodObject[]) => {
+    const mappedPods: JSX.Element[] = [];
+    for (let key in podData) {
+      const currPod = podData[key];
+      mappedPods.push(
+        <PodCard
+          key={`${key}${currPod.nodeName}`}
+          containers={currPod.containers}
+          hostIP={currPod.hostIP}
+          nodeName={currPod.nodeName}
+          phase={currPod.phase}
+          podIPs={currPod.podIPs}
+          podName={currPod.podName}
+          uid={currPod.uid}
+        />
+      )
+    }
+    setPodComponents(mappedPods);
+  }
 
   return (
     <>
@@ -79,14 +113,16 @@ const ViewStructure = () => {
         </div>
       </div>
       <hr />
-    <div className='main-info-container'>
-        {/* generated panel components for namespace details */}
-      <div className="card-container">
-        {/* <NamespaceComponent /> */}
-      </div>
+      <div className="main-info-container">
+        <div className="card-container">
+          {nodeCards}
+        </div>
+        <div className="pod-container">
+          {podComponents}
+        </div>
       </div>
     </>
   )
-}
+  }
 
 export default ViewStructure
