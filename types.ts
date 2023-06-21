@@ -39,3 +39,9 @@ export type namespaceMapObjectType = {
     phase: String
   }
 }
+
+export type namespaceObject = {
+  name: String,
+  uid: String,
+  status: String
+}

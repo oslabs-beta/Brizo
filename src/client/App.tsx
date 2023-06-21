@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ViewStructure from './components/ViewStructure';
 import ViewNamespace from './components/ViewNamespace';
 import ViewCluster from './components/ViewCluster';

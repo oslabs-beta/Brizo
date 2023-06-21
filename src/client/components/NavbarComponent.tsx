@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 export default function NavbarComponent() {
   const navigateTo = useNavigate();
-
+ 
   const refreshPage = () => {
     navigateTo('/');
     window.location.reload();
