@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import { sectionResultsInfo } from '../../../types'
+import { interface } from '../../../types'
 import { statusToColor, passedNumberFromTest, checkStatusFromTest } from '../../../functions'
 
 type benchResult = {
-  data: sectionResultsInfo,
+  data: interface
   testName: string
 }
 
 function CISConfigResult(props: benchResult) {
   const { data, testName } = props
   const { remediations, summary, testResults } = data;
-  let mutableSummary = [...summary]
   const [showMore, setShowMore] = useState(false);
   const [showRemediations, setShowRemediations] = useState(false);
   const [showResults, setShowResults] = useState(true);
