@@ -40,16 +40,14 @@ Brizo offers several key features that make it a valuable tool for kubernetes cl
 By using Brizo, developers can enjoy numerous benefits, such as:
 1. **Streamlined Cluster Testing**: Brizo automates the security benchmarking of your cluster.
 2. **Improved Cluster Structure for Autoscaling**: Brizo helps developers identify potential bottlenecks in their K8s cluster, which helps improve autoscaling capabilities.
-3. **Intuitive Dashboards**: Brizo offers customized Grafana dashboards that are tailored to ensuring your cluster is set up ideally for autoscaling, and displays it in an intuitive manner.
+3. **Intuitive Dashboards**: Brizo offers customized Grafana dashboards that are tailored to ensure your cluster is set up ideally for autoscaling, and displays it in an intuitive manner.
 
 ## Privacy Statement
-Brizo scrapes your K8s cluster for the purpose of displaying metrics and running CIS security protocol benchmark tests. The application does not extract or store any personal data from users. However, as a precaution, developers should avoid using sensitive information when generating clusters. This ensure that no sensitive data is inadvertently recorded or stored in the database.
+Brizo scrapes your K8s cluster for the purpose of displaying metrics and running CIS security protocol benchmark tests. The application does not extract or store any personal data from users. However, as a precaution, developers should avoid using sensitive information when generating clusters. This ensures that no sensitive data is inadvertently recorded or stored in the database.
 
 ## Installation
-Please note that Brizo is not yet available on the Chrome Web Store.  
 1. Ensure you have the required prerequisites installed:
     - [npm](https://www.npmjs.com/)
-    - [Google Chrome](https://www.google.com/chrome/)
 2. Fork the Brizo repository to your own GitHub account.
 3. Clone your forked repository to your local machine.
 ```bash
@@ -60,15 +58,11 @@ git clone https://github.com/<your-github-username>/brizo.git
 cd brizo
 npm install
 ```
-5. Insert Env Dependent Instructions Here.
-  - In a .env file, create a variable labeled KUBE_FILE_PATH
-    - For mac/linux users, assign it a value of ```'$HOME/.kube/config'```
-    - For windows users, assign it a value of ```'%USERPROFILE%/.kube/config'```
 
 ## Scripts
 Below are descriptions of each npm script:
 
-- `npm start`: Starts the development server using Nodemon
+- `npm run dev`: Starts the development server using Nodemon
 
 ## File Structure
 ```
@@ -79,11 +73,12 @@ Below are descriptions of each npm script:
   └── controllers
   └── routers
 ├── client
+  └── css
   └── components
-├── babel.config.js
 ├── tsconfig.json
 ├── webpack.config.js
 ├── types.ts
+├── functions.ts
 ├── package-lock.json
 └── package.json
 ```
