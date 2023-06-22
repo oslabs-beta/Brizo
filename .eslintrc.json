@@ -24,7 +24,8 @@
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "off",
         "semi": ["error", "always"],
-        "@typescript-eslint/semi": ["off"]
+        "@typescript-eslint/semi": ["off"],
+        "@typescript-eslint/no-non-null-assertion": ["off"]
     },
     "settings": {
         "react": {
