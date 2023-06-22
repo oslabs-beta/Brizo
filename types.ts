@@ -16,9 +16,9 @@ export type indexObjectType = {
 }
 
 export type sectionResultsInfo = {
-  testResults: String[],
-  remediations: String[],
-  summary: String[]
+  testResults: string[],
+  remediations: string[],
+  summary: string[]
 }
 
 export type testResultsObjectType = {
@@ -27,23 +27,23 @@ export type testResultsObjectType = {
   controlPlaneConfiguration: sectionResultsInfo,
   workerNodeSecurity: sectionResultsInfo,
   kubernetesPolicies: sectionResultsInfo,
-  totalSummary: String[]
+  totalSummary: string[]
 }
 
 export type namespaceMapType = {
   metadata: {
-    name: String,
-    uid: String
+    name: string,
+    uid: string
   },
   status: {
-    phase: String
+    phase: string
   }
 }
 
 export type namespaceObject = {
-  name: String,
-  uid: String,
-  status: String
+  name: string,
+  uid: string,
+  status: string
 }
 
 export type podListByNode = {
@@ -389,9 +389,9 @@ export type nodeObject = {
 };
 
 export type newNodeObject = {
-  name: String,
-  uid: String,
-  podCIDRs: String[],
+  name: string,
+  uid: string,
+  podCIDRs: string[],
   addresses: addressObject[],
   allocatable: allocatableObject,
   capacity: capacityObject,
@@ -410,10 +410,10 @@ export type addressObject = {
 export type allocatableObject = {
   cpu: string,
   'ephemeral-storage': string,
-  'hugepages-1Gi': String,
-  'hugepages-2Mi': String,
-  'hugepages-32Mi': String,
-  'hugepages-64Ki': String,
+  'hugepages-1Gi': string,
+  'hugepages-2Mi': string,
+  'hugepages-32Mi': string,
+  'hugepages-64Ki': string,
   memory: string,
   pods: string
 }
@@ -433,7 +433,7 @@ export type nodeCardProps = {
   key: string;
   name: string;
   uid: string;
-  podCIDRs: String[];
+  podCIDRs: string[];
   addresses: addressObject[];
   allocatable: allocatableObject;
   capacity: capacityObject;
@@ -451,7 +451,7 @@ export type podCardProps = {
 }
 
 export type imagesObject = {
-  names: String[],
+  names: string[],
   sizeBytes: number
 }
 

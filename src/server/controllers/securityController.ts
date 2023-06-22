@@ -128,9 +128,9 @@ const securityController = {
     });
   },
 
-  parseOutputData: (outputData: String[]) => {
+  parseOutputData: (outputData: string[]) => {
     // initialize test results array
-    const allTestResults: String[] = [];
+    const allTestResults: string[] = [];
 
     // iterate through outputData and store test results in test results array
     outputData.forEach((line) => {
@@ -388,7 +388,7 @@ const securityController = {
       ),
     };
 
-    const totalSummary: String[] = outputData.slice(
+    const totalSummary: string[] = outputData.slice(
       outputData.indexOf('== Summary total =='),
       outputData.indexOf('== Summary total ==') + 5
     );
@@ -408,8 +408,8 @@ const securityController = {
     return allTestInfo;
   },
 
-  condenseRemediations: (remediationsArr: String[]) => {
-    const parsedRemediations: String[] = [];
+  condenseRemediations: (remediationsArr: string[]) => {
+    const parsedRemediations: string[] = [];
     let combinedString: string = '';
 
     for (let index: number = 1; index < remediationsArr.length; index += 1) {
