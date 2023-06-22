@@ -6,6 +6,17 @@ import {
   volumeMounts,
 } from '../../../types';
 
+/**
+ * PodCards: Takes in a props object of type podCardProp and renders
+ * a card representing a Kubernetes pod with the props object.
+ * renderContainer() employs renderLivenessProbe() and renderVolumeMounts() to
+ * render all various forms of pod data.
+ * renderLivenessProbe() and renderVolumeMounts() to render special objects
+ * . The 
+ * `toggleContainerDisplay` function is used to toggle the display of
+ * additional container information when a button is clicked.
+ */
+
 function PodCard(props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
 
@@ -29,6 +40,9 @@ function PodCard(props: podCardProps) {
 
     // iterate over container object with for...in
     for (const key in container) {
+      if (key === "resources" || key === 'command') { // resources and command contain extremely long values / aren't important
+        continue;
+      }
       // check if object has own property to make sure key exists on the container object
       if (Object.prototype.hasOwnProperty.call(container, key)) {
         // initialize value const and assign it to container[key]
@@ -44,11 +58,11 @@ function PodCard(props: podCardProps) {
             // need to make sure it is not an array of objects here
             // map over array and create list items within ul tag
             renderedValue = (
-              <ul>
+              <>
                 {value.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <ul key={index}>{item}</ul>
                 ))}
-              </ul>
+              </>
             );
           } else {
             // handle objects
@@ -61,11 +75,11 @@ function PodCard(props: podCardProps) {
           }
         } else {
           // handle scalar values aka primitive data
-          renderedValue = <ul>{`${value}`}</ul>;
+          renderedValue = <ul>{`${key}: ${value}`}</ul>;
         }
         // push renderedValue to contArr
         if (renderedValue) {
-          contArr.push(<div>{renderedValue}</div>);
+          contArr.push(<>{renderedValue}</>)
         }
       }
     }
@@ -75,29 +89,29 @@ function PodCard(props: podCardProps) {
 
   const renderLivenessProbe = (value: livenessProbeObject) => {
     return (
-      <ul>
+      <>
         Liveness Probe:
         {Object.entries(value).map(([subKey, subVal]) => (
-          <li key={subKey}>
+          <ul key={subKey}>
             {subKey}: {`${subVal}`}
-          </li>
+          </ul>
         ))}
-      </ul>
+      </>
     );
   };
 
   const renderVolumeMounts = (value: volumeMounts[]) => {
     return (
-      <ul>
+      <>
         Volume Mounts:
         {value.map((mountInfo, index) => (
-          <li key={index}>
+          <ul key={index}>
             Name: {mountInfo.name}
             <br />
             Mount Path: {mountInfo.mountPath}
-          </li>
+          </ul>
         ))}
-      </ul>
+      </>
     );
   };
 
@@ -110,29 +124,31 @@ function PodCard(props: podCardProps) {
       return renderedContainer;
     });
 
-  const toggleContainerDisplay = () => {
+  const toggleContainerDisplay = () => { // TODO
     // DOM manipulation because my brain is fried (pleae change future owen)
     const hiddenContainers = document.getElementsByClassName('display-more');
     console.log(hiddenContainers);
-    // for (let containerText of hiddenContainers) { // code works but fix typing
-    //   containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
-    // }
     Array.from(hiddenContainers).forEach((containerText) => {
       console.log(containerText);
       // containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
     });
   };
 
+  const renderPodIps = () => podIPs.map((ipAddresses) => <ul>{ ipAddresses.ip }</ul>)
+
   return (
     <div className="pod-card">
       <h5>{podName}</h5>
       <h6>{uid}</h6>
-      <ul>{phaseStatusToColor()}</ul>
+      {phaseStatusToColor()}
       <ul>{nodeName}</ul>
       <ul>{hostIP}</ul>
-      <ul>{containerArrToText()}</ul>
-      <button onClick={toggleContainerDisplay}>show more</button>
-      <ul>{/* {podIPs} */}</ul>
+      <hr className='light-hr' />
+      {containerArrToText()}
+      {/* <button onClick={toggleContainerDisplay}>show more</button> */}
+      <hr className='light-hr' />
+      <ul>Pod IPs:</ul> 
+      <ul>{renderPodIps()}</ul>
     </div>
   );
 }

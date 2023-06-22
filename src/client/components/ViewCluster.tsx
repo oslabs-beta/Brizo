@@ -25,18 +25,26 @@ function ViewCluster() {
       console.error(error);
     }
   }
-
+  
   return (
     <>
-      <div>INSERT CLUSTER METRIC IFRAME HERE FOR MVP</div>
+      <div className="benchmark-buttons-container">
+        <div className="benchmark-buttons">
+          <button onClick={fetchCISTest} style={{ backgroundColor: '#90ee90' }}>cis test</button>
+          <button onClick={() => {}} style={{backgroundColor: '#78cc78' }}>load bal test</button>
+        </div>
+      </div>
+      <hr/>
       <div className='main-info-container'>
-        <button style={{ backgroundColor: 'lightgreen' }} onClick={fetchCISTest}>cis test</button>
-        {totalCISResults}
-        {controlPlaneConfiguration}
-        {controlPlaneSecurityConfiguration}
-        {etcdNodeConfiguration}
-        {kubernetesPolicies}
-        {workerNodeSecurity}
+        {/* <iframe src=''></iframe> */}
+        <div className='cis-container'>
+          {totalCISResults}
+          {controlPlaneConfiguration}
+          {controlPlaneSecurityConfiguration}
+          {etcdNodeConfiguration}
+          {kubernetesPolicies}
+          {workerNodeSecurity}
+        </div>
       </div>
     </>
   )
