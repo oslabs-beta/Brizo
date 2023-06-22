@@ -1,5 +1,10 @@
-import React, { ReactNode, useRef } from 'react'
-import { podCardProps, containerObject, livenessProbeObject, volumeMounts } from '../../../types';
+import React, { ReactNode, useRef } from 'react';
+import {
+  podCardProps,
+  containerObject,
+  livenessProbeObject,
+  volumeMounts,
+} from '../../../types';
 
 function PodCard(props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
@@ -9,35 +14,34 @@ function PodCard(props: podCardProps) {
     if (phase === 'Running' || phase === 'Succeeded') textColor = 'green';
     else if (phase === 'Pending') textColor = 'yellow';
     else textColor = 'red';
-    return (<ul style={{color: textColor}}>{phase}</ul>)
-  }
+    return <ul style={{ color: textColor }}>{phase}</ul>;
+  };
 
   const renderContainer = (container: containerObject) => {
-    
     // create rendering logic object with rendering functions as key/value pairs
-    const renderingLogic: {[key: string]: (value: any) => JSX.Element} = {
+    const renderingLogic: { [key: string]: (value: any) => JSX.Element } = {
       livenessProbe: renderLivenessProbe,
       volumeMounts: renderVolumeMounts,
     };
-    
+
     // initialize container array
     const contArr = [];
 
-    // iterate over container object with for...in 
+    // iterate over container object with for...in
     for (const key in container) {
       // check if object has own property to make sure key exists on the container object
       if (Object.prototype.hasOwnProperty.call(container, key)) {
-
         // initialize value const and assign it to container[key]
         const value = container[key as keyof containerObject];
 
-        // initialize rendered value to return later 
+        // initialize rendered value to return later
         let renderedValue;
 
         // check for objects and arrays types
         if (typeof value === 'object' && value !== null) {
-          // handle the arrays 
-          if (Array.isArray(value)) {
+          // handle the arrays
+          if (Array.isArray(value) && typeof value[0] !== 'object') {
+            // need to make sure it is not an array of objects here
             // map over array and create list items within ul tag
             renderedValue = (
               <ul>
@@ -47,11 +51,11 @@ function PodCard(props: podCardProps) {
               </ul>
             );
           } else {
-            // handle objects 
-            // invoke appropriate renderingLogic function and store function body in renderingFunction 
-            const renderingFunction = renderingLogic[key];
-            if (renderingFunction) {
-              // invoke rendering function w? given value passed in and store evaluated output in renderedValue 
+            // handle objects
+            // invoke appropriate renderingLogic function and store function body in renderingFunction
+            if (key === 'volumeMounts' || key === 'livenessProbe') {
+              const renderingFunction = renderingLogic[key];
+              // invoke rendering function w/ given value passed in and store evaluated output in renderedValue
               renderedValue = renderingFunction(value);
             }
           }
@@ -61,9 +65,7 @@ function PodCard(props: podCardProps) {
         }
         // push renderedValue to contArr
         if (renderedValue) {
-          contArr.push(
-            <div>{renderedValue}</div>
-          )
+          contArr.push(<div>{renderedValue}</div>);
         }
       }
     }
@@ -73,51 +75,56 @@ function PodCard(props: podCardProps) {
 
   const renderLivenessProbe = (value: livenessProbeObject) => {
     return (
-      <ul> 
-      Liveness Probe: 
-      {Object.entries(value).map(([subKey, subVal]) => (
-        <li key={subKey}>
-        {subKey}: {`${subVal}`}
-        </li>
-      ))}
+      <ul>
+        Liveness Probe:
+        {Object.entries(value).map(([subKey, subVal]) => (
+          <li key={subKey}>
+            {subKey}: {`${subVal}`}
+          </li>
+        ))}
       </ul>
-    )
-  }
+    );
+  };
 
   const renderVolumeMounts = (value: volumeMounts[]) => {
     return (
-      <ul> 
-        Volume Mounts: 
+      <ul>
+        Volume Mounts:
         {value.map((mountInfo, index) => (
-          <li key ={index}>
-            Name: {mountInfo.name}<br />
+          <li key={index}>
+            Name: {mountInfo.name}
+            <br />
             Mount Path: {mountInfo.mountPath}
           </li>
         ))}
       </ul>
-    )
-  }
+    );
+  };
 
-  const containerArrToText = () => containers.flatMap((container: containerObject, index) => {
-    const renderedContainer = renderContainer(container);
-    return renderedContainer;
-  })
+  const containerArrToText = () =>
+    // iterate over flattened containers array
+    containers.flatMap((container: containerObject, index) => {
+      // invoke renderContainer with container passed in
+      const renderedContainer = renderContainer(container);
+      // store evaluated output in renderedContainer and return it
+      return renderedContainer;
+    });
 
   const toggleContainerDisplay = () => {
     // DOM manipulation because my brain is fried (pleae change future owen)
     const hiddenContainers = document.getElementsByClassName('display-more');
-    console.log(hiddenContainers)
+    console.log(hiddenContainers);
     // for (let containerText of hiddenContainers) { // code works but fix typing
     //   containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
     // }
-    Array.from(hiddenContainers).forEach(containerText => { 
-      console.log(containerText)
+    Array.from(hiddenContainers).forEach((containerText) => {
+      console.log(containerText);
       // containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
-    })
-  }
+    });
+  };
 
   return (
-    <div className='pod-card'>
+    <div className="pod-card">
       <h5>{podName}</h5>
       <h6>{uid}</h6>
       <ul>{phaseStatusToColor()}</ul>
@@ -127,7 +134,7 @@ function PodCard(props: podCardProps) {
       <button onClick={toggleContainerDisplay}>show more</button>
       <ul>{/* {podIPs} */}</ul>
     </div>
-  )
+  );
 }
 
-export default PodCard
+export default PodCard;
