@@ -75,7 +75,7 @@ function PodCard(props: podCardProps) {
           }
         } else {
           // handle scalar values aka primitive data
-          renderedValue = <ul>{`${value}`}</ul>;
+          renderedValue = <ul>{`${key}: ${value}`}</ul>;
         }
         // push renderedValue to contArr
         if (renderedValue) {
@@ -143,11 +143,11 @@ function PodCard(props: podCardProps) {
       {phaseStatusToColor()}
       <ul>{nodeName}</ul>
       <ul>{hostIP}</ul>
-      <hr className='light-hr'></hr>
+      <hr className='light-hr' />
       {containerArrToText()}
       {/* <button onClick={toggleContainerDisplay}>show more</button> */}
-      <hr className='light-hr'></hr>
-      <ul>Pod IPs:</ul>
+      <hr className='light-hr' />
+      <ul>Pod IPs:</ul> 
       <ul>{renderPodIps()}</ul>
     </div>
   );

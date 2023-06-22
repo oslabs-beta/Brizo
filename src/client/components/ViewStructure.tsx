@@ -103,10 +103,8 @@ const ViewStructure = () => {
 
   return (
     <>
-      <div>
-        <div className='namespace-button-container'>
-          {namespaceButtons}
-        </div>
+      <div className='namespace-button-container'>
+        {namespaceButtons}
       </div>
       <hr />
       <div className="main-info-container">
