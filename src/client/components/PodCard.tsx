@@ -134,6 +134,8 @@ function PodCard(props: podCardProps) {
     });
   };
 
+  const renderPodIps = () => podIPs.map((ipAddresses) => <ul>{ ipAddresses.ip }</ul>)
+
   return (
     <div className="pod-card">
       <h5>{podName}</h5>
@@ -141,9 +143,12 @@ function PodCard(props: podCardProps) {
       {phaseStatusToColor()}
       <ul>{nodeName}</ul>
       <ul>{hostIP}</ul>
+      <hr className='light-hr'></hr>
       {containerArrToText()}
-      <button onClick={toggleContainerDisplay}>show more</button>
-      <ul>{/* {podIPs} */}</ul>
+      {/* <button onClick={toggleContainerDisplay}>show more</button> */}
+      <hr className='light-hr'></hr>
+      <ul>Pod IPs:</ul>
+      <ul>{renderPodIps()}</ul>
     </div>
   );
 }

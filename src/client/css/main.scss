@@ -197,6 +197,14 @@ right: 0;
   display: none;
 }
 
+.light-hr {
+  // border-color: #dbe6e3;
+  background: linear-gradient(90deg, rgb(241,254,250) 0%, rgb(219,230,227) 50%, rgb(241,254,250) 100%);
+  height: 2px;
+  border: none;
+  margin: 5px;
+}
+
 // ! ANIMATIONS !
 
 @keyframes fadein {
