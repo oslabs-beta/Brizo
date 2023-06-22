@@ -5,7 +5,13 @@ import ViewNamespace from './components/ViewNamespace';
 import ViewCluster from './components/ViewCluster';
 import MainContainer from './components/MainContainer';
 
-const router = createHashRouter([
+/**
+ * MainContainer: The root for the browser router.
+ * Children: Components that will be displayed where the <Outlet> component is
+ * provided.
+ */
+
+const router = createBrowserRouter([
   {
     path: '/',
     element: <MainContainer />,

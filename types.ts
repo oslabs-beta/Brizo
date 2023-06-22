@@ -241,17 +241,17 @@ export type podObject = {
 };
 
 export type containerObject = {
-  env: {
-    name: string;
+  env?: {
+    name?: string;
     value?: string;
     valueFrom?: {
       fieldRef?: {
-        apiVersion: string;
-        fieldPath: string;
+        apiVersion?: string;
+        fieldPath?: string;
       };
       secretKeyRef?: {
-        key: string;
-        name: string;
+        key?: string;
+        name?: string;
       };
     };
   }[];
@@ -453,4 +453,22 @@ export type podCardProps = {
 export type imagesObject = {
   names: String[],
   sizeBytes: number
+}
+
+export type livenessProbeObject = {
+  failureThreshold?: number,
+  httpGet?: {
+    path: string,
+    port: number,
+    scheme: string
+  },
+  initialDelaySeconds?: number,
+  periodSeconds?: number, 
+  successThreshold?: number,
+  timeoutSeconds?: number
+}
+
+export type volumeMounts = {
+  mountPath: string,
+  name: string,
 }
