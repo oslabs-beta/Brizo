@@ -1,12 +1,12 @@
-import React from 'react'
-import { statusToColor, passedNumberFromTest, checkStatusFromTest } from '../../../functions'
+import React from 'react';
+import { statusToColor, passedNumberFromTest, checkStatusFromTest } from '../../../functions';
 interface CISSummary {
   data: string[]
 }
 
-function GrandCISResults(props: CISSummary) {
+function GrandCISResults (props: CISSummary) {
   const { data } = props;
-  data.shift() // remove '=== Summary Total ===' 
+  data.shift(); // remove '=== Summary Total ==='
 
   const renderResult = (resultText: string) => (
     <>
@@ -14,7 +14,7 @@ function GrandCISResults(props: CISSummary) {
       <br />
       <p style={{ color: statusToColor(checkStatusFromTest(resultText)) }}>{checkStatusFromTest(resultText)}</p>
     </>
-  )
+  );
 
   return (
     <div className='summary-container'>
@@ -25,11 +25,11 @@ function GrandCISResults(props: CISSummary) {
           <div key={index}>
             {renderResult(item)}
           </div>
-        )
+        );
       })}
       </div>
     </div>
-  )
+  );
 }
 
-export default GrandCISResults
+export default GrandCISResults;

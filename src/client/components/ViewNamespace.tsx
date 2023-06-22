@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-function ViewNamespace() {
+function ViewNamespace () {
   return (
     <>
     <div>INSERT NAMESPACE METRIC IFRAME HERE FOR MVP</div>
     <iframe src=''></iframe>
     </>
-  )
+  );
 }
 
-export default ViewNamespace
+export default ViewNamespace;

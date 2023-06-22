@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import NodeCard from './NodeCard';
 import PodCard from './PodCard';
 import { useNamespaces } from './MainContainer';
-import useAsyncEffect from 'use-async-effect'
-import { namespaceObject, newNodeObject, newPodObject } from '../../../types';
+import useAsyncEffect from 'use-async-effect';
+import type { namespaceObject, newNodeObject, newPodObject } from '../../../types';
 import axios from 'axios';
 
 const ViewStructure = () => {
@@ -12,41 +12,43 @@ const ViewStructure = () => {
   const [nodeCards, setNodeCards] = React.useState<JSX.Element[]>([]);
   const [podComponents, setPodComponents] = React.useState<JSX.Element[]>([]);
 
-  useAsyncEffect(async () => fetchNamespaces(), [])
+  useAsyncEffect(async () => {
+    await fetchNamespaces();
+  }, []);
 
   // FETCH NAMESPACES
   const fetchNamespaces = async () => {
     try {
-      const response = await axios.get('/api/cluster/namespaces'); 
+      const response = await axios.get('/api/cluster/namespaces');
       const namespacesData = response.data;
       setNamespaces(namespacesData);
-      await createNamespaceComponents(namespacesData);
+      createNamespaceComponents(namespacesData);
     } catch (error) {
       console.error(error);
     }
   };
   // FETCH POD INFO
-  const fetchPod = async (selectedNamespace: String) => {
+  const fetchPod = async (selectedNamespace: string) => {
     try {
-      const response = await axios.get(`/api/cluster/pod/${selectedNamespace}`); 
+      const response = await axios.get(`/api/cluster/pod/${selectedNamespace}`);
       const podsData = response.data;
       console.log(podsData);
-      await createPodComponents(podsData);
+      createPodComponents(podsData);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
   // FETCH NODE INFO
-  const fetchNode = async (selectedNamespace: String) => {
+  const fetchNode = async (selectedNamespace: string): Promise<void> => {
     try {
-      const response = await axios.get(`/api/cluster/node/${selectedNamespace}`); 
+      const response = await axios.get(`/api/cluster/node/${selectedNamespace}`);
       const nodesData = response.data;
-      await createNodeComponents(nodesData);
-      fetchPod(selectedNamespace);
+      createNodeComponents(nodesData);
+      await fetchPod(selectedNamespace);
     } catch (error) {
       console.error(error);
     }
-   }
+  };
   // CREATE NAMESPACE COMPONENTS
   const createNamespaceComponents = (namespaceArray: namespaceObject[]) => {
     const buttons = namespaceArray.map((namespaceObject: namespaceObject, index) => (
@@ -55,7 +57,7 @@ const ViewStructure = () => {
         style={{ backgroundColor: 'white' }}
         id={`${namespaceObject.name}`}
         onClick={() => {
-          fetchNode(namespaceObject.name);
+          void fetchNode(namespaceObject.name);
         }}
         >
         {namespaceObject.name}
@@ -66,20 +68,20 @@ const ViewStructure = () => {
   // CREATE NODE COMPONENTS
   const createNodeComponents = (nodeData: newNodeObject[]) => {
     const mappedNodes = nodeData.map((node) => {
-        return (
+      return (
         <NodeCard
-         key={`${node.name}`}
-         name={`${node.name}`}
-         uid={`${node.uid}`}
-         podCIDRs={node.podCIDRs}
-         addresses={node.addresses}
-         allocatable={node.allocatable}
-         capacity={node.capacity}
-         images={node.images}
-       />)
-    })
+        key={`${node.name}`}
+        name={`${node.name}`}
+        uid={`${node.uid}`}
+        podCIDRs={node.podCIDRs}
+        addresses={node.addresses}
+        allocatable={node.allocatable}
+        capacity={node.capacity}
+        images={node.images}
+       />);
+    });
     setNodeCards(mappedNodes);
-  }
+  };
 
   const createPodComponents = (podData: newPodObject[]) => {
     const mappedPods: JSX.Element[] = [];
@@ -99,7 +101,7 @@ const ViewStructure = () => {
       )
     }
     setPodComponents(mappedPods);
-  }
+  };
 
   return (
     <>
@@ -116,7 +118,7 @@ const ViewStructure = () => {
         </div>
       </div>
     </>
-  )
-  }
+  );
+};
 
-export default ViewStructure
+export default ViewStructure;

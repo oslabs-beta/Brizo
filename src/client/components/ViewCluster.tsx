@@ -30,8 +30,8 @@ function ViewCluster () {
     <>
       <div className="benchmark-buttons-container">
         <div className="benchmark-buttons">
-          <button onClick={fetchCISTest} style={{ backgroundColor: '#90ee90' }}>cis test</button>
-          <button onClick={() => {}} style={{ backgroundColor: '#78cc78' }}>load bal test</button>
+          <button onClick={() => { void fetchCISTest(); }} style={{ backgroundColor: '#90ee90' }}>cis test</button>
+          <button onClick={() => ({})} style={{ backgroundColor: '#78cc78' }}>load bal test</button>
         </div>
       </div>
       <hr/>

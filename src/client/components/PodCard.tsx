@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef } from 'react';
-import {
+import type {
   podCardProps,
   containerObject,
   livenessProbeObject,
@@ -12,10 +12,16 @@ import {
  * renderContainer() employs renderLivenessProbe() and renderVolumeMounts() to
  * render all various forms of pod data.
  * renderLivenessProbe() and renderVolumeMounts() to render special objects
- * . The 
+ * . The
  * `toggleContainerDisplay` function is used to toggle the display of
  * additional container information when a button is clicked.
  */
+
+type mountInfoType = Record<string, string>;
+type mountInfoMap = Array<{
+  name: string;
+  mountPath: string;
+}>;
 
 function PodCard(props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
@@ -30,17 +36,18 @@ function PodCard(props: podCardProps) {
 
   const renderContainer = (container: containerObject) => {
     // create rendering logic object with rendering functions as key/value pairs
-    const renderingLogic: { [key: string]: (value: any) => JSX.Element } = {
-      livenessProbe: renderLivenessProbe,
-      volumeMounts: renderVolumeMounts,
-    };
+    // const renderingLogic: Record<string, (value: typeof renderLivenessProbe | typeof renderVolumeMounts) => livenessProbeObject | volumeMounts> = {
+    //   livenessProbe: renderLivenessProbe,
+    //   volumeMounts: renderVolumeMounts
+    // };
 
     // initialize container array
-    const contArr = [];
+    const contArr: JSX.Element[] = [];
 
     // iterate over container object with for...in
     for (const key in container) {
-      if (key === "resources" || key === 'command' || key === 'args') { // resources and command contain extremely long values / aren't important
+      if (key === 'resources' || key === 'command' || key === 'args') {
+        // resources and command contain extremely long values / aren't important
         continue;
       }
       // check if object has own property to make sure key exists on the container object
@@ -68,18 +75,24 @@ function PodCard(props: podCardProps) {
             // handle objects
             // invoke appropriate renderingLogic function and store function body in renderingFunction
             if (key === 'volumeMounts' || key === 'livenessProbe') {
-              const renderingFunction = renderingLogic[key];
+              // const renderingFunction = renderingLogic[key];
               // invoke rendering function w/ given value passed in and store evaluated output in renderedValue
-              renderedValue = renderingFunction(value);
+              // renderedValue = renderingFunction(value);
+              console.log(value);
+              if (key === 'volumeMounts') {
+                renderedValue = renderVolumeMounts(value);
+              } else if (key === 'livenessProbe') {
+                renderedValue = renderLivenessProbe(value);
+              }
             }
           }
         } else {
           // handle scalar values aka primitive data
-          renderedValue = <ul>{`${key}: ${value}`}</ul>;
+          renderedValue = <ul>{`${key}: ${value!}`}</ul>;
         }
         // push renderedValue to contArr
-        if (renderedValue) {
-          contArr.push(<>{renderedValue}</>)
+        if (renderedValue !== null) {
+          contArr.push(<>{renderedValue}</>);
         }
       }
     }
@@ -87,7 +100,7 @@ function PodCard(props: podCardProps) {
     return contArr;
   };
 
-  const renderLivenessProbe = (value: livenessProbeObject) => {
+  const renderLivenessProbe = (value: livenessProbeObject[]) => {
     return (
       <>
         Liveness Probe:
@@ -100,11 +113,11 @@ function PodCard(props: podCardProps) {
     );
   };
 
-  const renderVolumeMounts = (value: volumeMounts[]) => {
+  const renderVolumeMounts = (value: unknown[]) => {
     return (
       <>
         Volume Mounts:
-        {value.map((mountInfo, index) => (
+        {value.map((mountInfo: mountInfoType, index) => (
           <ul key={index}>
             Name: {mountInfo.name}
             <br />
@@ -124,17 +137,21 @@ function PodCard(props: podCardProps) {
       return renderedContainer;
     });
 
-  const toggleContainerDisplay = () => { // TODO
-    // DOM manipulation because my brain is fried (pleae change future owen)
-    const hiddenContainers = document.getElementsByClassName('display-more');
-    console.log(hiddenContainers);
-    Array.from(hiddenContainers).forEach((containerText) => {
-      console.log(containerText);
-      // containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
-    });
-  };
+  // const toggleContainerDisplay = () => {
+  //   // TODO
+  //   // DOM manipulation because my brain is fried (pleae change future owen)
+  //   const hiddenContainers = document.getElementsByClassName('display-more');
+  //   console.log(hiddenContainers);
+  //   Array.from(hiddenContainers).forEach((containerText) => {
+  //     console.log(containerText);
+  //     // containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
+  //   });
+  // };
 
-  const renderPodIps = () => podIPs.map((ipAddresses) => <ul>{ ipAddresses.ip }</ul>)
+  const renderPodIps = () =>
+    podIPs.map((ipAddresses, index) => (
+      <ul key={`ip${index}`}>{ipAddresses.ip}</ul>
+    ));
 
   return (
     <div className="pod-card">
@@ -143,11 +160,11 @@ function PodCard(props: podCardProps) {
       {phaseStatusToColor()}
       <ul>{nodeName}</ul>
       <ul>{hostIP}</ul>
-      <hr className='light-hr' />
+      <hr className="light-hr" />
       {containerArrToText()}
       {/* <button onClick={toggleContainerDisplay}>show more</button> */}
-      <hr className='light-hr' />
-      <ul>Pod IPs:</ul> 
+      <hr className="light-hr" />
+      <ul>Pod IPs:</ul>
       <ul>{renderPodIps()}</ul>
     </div>
   );
