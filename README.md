@@ -1,6 +1,6 @@
 # Brizo
 
-  ![Banner](<insert banner path>)
+  ![Brizo Banner](https://github.com/oslabs-beta/Brizo/blob/dev/assets/brizo-high-resolution-color-logo.png?raw=true)
 
 
 Brizo is a lightweight developer tool built from scratch to help developers monitor their kubernetes clusters. Prometheus and Grafana work together to monitor and display important cluster health metrics for a K8s cluster. Brizo also runs your cluster through CIS security testing standards to ensure proper cluster security.
