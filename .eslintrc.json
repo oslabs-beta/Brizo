@@ -22,7 +22,9 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/explicit-function-return-type": "off"
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "semi": ["error", "always"],
+        "@typescript-eslint/semi": ["off"]
     },
     "settings": {
         "react": {
