@@ -1,6 +1,6 @@
 import React from 'react'
 import { statusToColor, passedNumberFromTest, checkStatusFromTest } from '../../../functions'
-type CISSummary = {
+interface CISSummary {
   data: string[]
 }
 
