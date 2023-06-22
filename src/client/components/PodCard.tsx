@@ -40,7 +40,7 @@ function PodCard(props: podCardProps) {
 
     // iterate over container object with for...in
     for (const key in container) {
-      if (key === "resources" || key === 'command') { // resources and command contain extremely long values / aren't important
+      if (key === "resources" || key === 'command' || key === 'args') { // resources and command contain extremely long values / aren't important
         continue;
       }
       // check if object has own property to make sure key exists on the container object
