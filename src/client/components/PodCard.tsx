@@ -1,6 +1,17 @@
 import React, { ReactNode, useRef } from 'react'
 import { podCardProps, containerObject, livenessProbeObject, volumeMounts } from '../../../types';
 
+/**
+ * PodCards: Takes in a props object of type podCardProp and renders
+ * a card representing a Kubernetes pod with the props object.
+ * renderContainer() employs renderLivenessProbe() and renderVolumeMounts() to
+ * render all various forms of pod data.
+ * renderLivenessProbe() and renderVolumeMounts() to render special objects
+ * . The 
+ * `toggleContainerDisplay` function is used to toggle the display of
+ * additional container information when a button is clicked.
+ */
+
 function PodCard(props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
 

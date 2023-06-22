@@ -5,10 +5,6 @@ import { useNamespaces } from './MainContainer';
 import useAsyncEffect from 'use-async-effect'
 import { namespaceObject, newNodeObject, newPodObject } from '../../../types';
 import axios from 'axios';
-// switch to carousel instead of static cards?
-// TODO: add scrolling for multiple cards
-// TODO: generate cards on # of namespaces
-// TODO: define card width on # of namespaces
 
 const ViewStructure = () => {
   const { namespaces, setNamespaces } = useNamespaces();

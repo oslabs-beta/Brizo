@@ -18,9 +18,9 @@ export default function MainContainer() {
   const [namespaces, setNamespaces] = React.useState<String[] | null>([]);
   
   /**
-   * By providing Outlet with a context we're able to share the values and
+   * By providing Outlet with a context, we're able to share the values and
    * functions we pass into context with any component that uses the appropriate
-   * functions. For this instance, the function necessary for retrieval of namespaces and setNamespaces is useNamespaces(), which returns a context provider with the type ContextType, which is a type that expects an array of strings and a setNamespaces funct 
+   * functions. For this instance, the function necessary for retrieval of namespaces and setNamespaces is useNamespaces(), which returns a context provider with the type ContextType, which is a type that expects an array of strings and a setNamespaces function.
    */
 
   return (
