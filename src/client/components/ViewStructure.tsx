@@ -85,21 +85,23 @@ const ViewStructure = () => {
 
   const createPodComponents = (podData: newPodObject[]) => {
     const mappedPods: JSX.Element[] = [];
-    for (let key in podData) {
-      const currPod = podData[key];
-      mappedPods.push(
-        <PodCard
-          key={`${key}${currPod.nodeName}`}
-          containers={currPod.containers}
-          hostIP={currPod.hostIP}
-          nodeName={currPod.nodeName}
-          phase={currPod.phase}
-          podIPs={currPod.podIPs}
-          podName={currPod.podName}
-          uid={currPod.uid}
-        />
-      )
-    }
+    console.log(podData);
+    // for (const key in podData) {
+    //   // const value = podData[key as keyof newPodObject];
+    //   const currPod = podData[key];
+    //   mappedPods.push(
+    //     <PodCard
+    //       key={`${key}${currPod.nodeName}`}
+    //       containers={currPod.containers}
+    //       hostIP={currPod.hostIP}
+    //       nodeName={currPod.nodeName}
+    //       phase={currPod.phase}
+    //       podIPs={currPod.podIPs}
+    //       podName={currPod.podName}
+    //       uid={currPod.uid}
+    //     />
+    //   );
+    // }
     setPodComponents(mappedPods);
   };
 

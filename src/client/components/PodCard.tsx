@@ -1,9 +1,9 @@
 import React, { ReactNode, useRef } from 'react';
 import type {
-  podCardProps,
-  containerObject,
-  livenessProbeObject,
-  volumeMounts,
+  podCardProps
+  // containerObject,
+  // livenessProbeObject,
+  // volumeMounts
 } from '../../../types';
 
 /**
@@ -17,13 +17,19 @@ import type {
  * additional container information when a button is clicked.
  */
 
-type mountInfoType = Record<string, string>;
 type mountInfoMap = Array<{
-  name: string;
-  mountPath: string;
+  index: number
+  value: string
+  array: []
+  name: string
+  mountPath: string
 }>;
 
-function PodCard(props: podCardProps) {
+type containerObject = Record<string, any>;
+
+type livenessProbeObject = Record<string, any>;
+
+function PodCard (props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
 
   const phaseStatusToColor = () => {
@@ -53,7 +59,7 @@ function PodCard(props: podCardProps) {
       // check if object has own property to make sure key exists on the container object
       if (Object.prototype.hasOwnProperty.call(container, key)) {
         // initialize value const and assign it to container[key]
-        const value = container[key as keyof containerObject];
+        const value = container[key];
 
         // initialize rendered value to return later
         let renderedValue;
@@ -88,7 +94,8 @@ function PodCard(props: podCardProps) {
           }
         } else {
           // handle scalar values aka primitive data
-          renderedValue = <ul>{`${key}: ${value!}`}</ul>;
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          renderedValue = <ul>{`${key}: ${value}`}</ul>;
         }
         // push renderedValue to contArr
         if (renderedValue !== null) {
@@ -106,18 +113,19 @@ function PodCard(props: podCardProps) {
         Liveness Probe:
         {Object.entries(value).map(([subKey, subVal]) => (
           <ul key={subKey}>
-            {subKey}: {`${subVal}`}
+            { /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */ }
+            {subKey}: {`${subVal[subKey]}`}
           </ul>
         ))}
       </>
     );
   };
 
-  const renderVolumeMounts = (value: unknown[]) => {
+  const renderVolumeMounts = (value: mountInfoMap) => {
     return (
       <>
         Volume Mounts:
-        {value.map((mountInfo: mountInfoType, index) => (
+        {value.map((mountInfo, index) => (
           <ul key={index}>
             Name: {mountInfo.name}
             <br />
