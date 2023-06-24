@@ -1,474 +1,203 @@
-import { Request, Response, NextFunction } from 'express';
-
-export type ServerError = {
-  err: '400';
-};
-
-export type clusterControllerType = {
-  getPods: (req: Request, res: Response, next: NextFunction) => void;
-  getNodes: (req: Request, res: Response, next: NextFunction) => void;
-  getNamespaces: (req: Request, res: Response, next: NextFunction) => void;
+import type { V1Container, V1ContainerImage, V1PodIP } from '@kubernetes/client-node';
+import type { Request, Response, NextFunction } from 'express';
+export interface ServerError {
+  err: '400'
 }
 
-export type indexObjectType = {
-  position: number,
+export interface clusterControllerType {
+  getPods: (req: Request, res: Response, next: NextFunction) => Promise<void>
+  getNodes: (req: Request, res: Response, next: NextFunction) => Promise<void>
+  getNamespaces: (req: Request, res: Response, next: NextFunction) => Promise<void>
+}
+
+export interface indexObjectType {
+  position: number
   assigned: boolean
 }
 
-export type sectionResultsInfo = {
-  testResults: string[],
-  remediations: string[],
+export interface sectionResultsInfo {
+  testResults: string[]
+  remediations: string[]
   summary: string[]
 }
 
-export type testResultsObjectType = {
-  controlPlaneSecurityConfiguration: sectionResultsInfo,
-  etcdNodeConfiguration: sectionResultsInfo,
-  controlPlaneConfiguration: sectionResultsInfo,
-  workerNodeSecurity: sectionResultsInfo,
-  kubernetesPolicies: sectionResultsInfo,
+export interface allTestInfoType {
+  controlPlaneSecurityConfiguration: sectionResultsInfo
+  etcdNodeConfiguration: sectionResultsInfo
+  controlPlaneConfiguration: sectionResultsInfo
+  workerNodeSecurity: sectionResultsInfo
+  kubernetesPolicies: sectionResultsInfo
   totalSummary: string[]
 }
 
-export type namespaceMapType = {
-  metadata: {
-    name: string,
-    uid: string
-  },
-  status: {
-    phase: string
-  }
-}
-
-export type namespaceObject = {
-  name: string,
-  uid: string,
+export interface namespaceObject {
+  name: string
+  uid: string
   status: string
 }
 
-export type podListByNode = {
-  [nodeName: string] : {
-    [podName: string]: podObject
-  };
-}
-
-export type podObject = {
-  metadata: {
-    annotations: {
-      [key: string]: string;
-    };
-    creationTimestamp: string;
-    generateName: string;
-    labels: {
-      [key: string]: string;
-    };
-    managedFields: {
-      apiVersion: string;
-      fieldsType: string;
-      fieldsV1: {
-        [key: string]: any;
-      };
-      manager: string;
-      operation: string;
-      time: string;
-      subresource?: string;
-    }[];
-    name: string;
-    namespace: string;
-    ownerReferences: {
-      apiVersion: string;
-      blockOwnerDeletion: boolean;
-      controller: boolean;
-      kind: string;
-      name: string;
-      uid: string;
-    }[];
-    resourceVersion: string;
-    uid: string;
-  };
-  spec: {
-    automountServiceAccountToken: boolean;
-    containers: {
-      env: {
-        name: string;
-        valueFrom?: {
-          fieldRef?: {
-            apiVersion: string;
-            fieldPath: string;
-          };
-          secretKeyRef?: {
-            key: string;
-            name: string;
-          };
-        };
-        value?: string;
-      }[];
-      image: string;
-      imagePullPolicy: string;
-      livenessProbe: {
-        failureThreshold: number;
-        httpGet: {
-          path: string;
-          port: number;
-          scheme: string;
-        };
-        initialDelaySeconds: number;
-        periodSeconds: number;
-        successThreshold: number;
-        timeoutSeconds: number;
-      };
-      name: string;
-      ports: {
-        containerPort: number;
-        name: string;
-        protocol: string;
-      }[];
-      readinessProbe: {
-        failureThreshold: number;
-        httpGet: {
-          path: string;
-          port: number;
-          scheme: string;
-        };
-        periodSeconds: number;
-        successThreshold: number;
-        timeoutSeconds: number;
-      };
-      resources: any;
-      securityContext: {
-        allowPrivilegeEscalation: boolean;
-        capabilities: {
-          drop: string[];
-        };
-        seccompProfile: {
-          type: string;
-        };
-      };
-      terminationMessagePath: string;
-      terminationMessagePolicy: string;
-      volumeMounts: {
-        mountPath: string;
-        name: string;
-        subPath?: string;
-        readOnly?: boolean;
-      }[];
-    }[];
-    dnsPolicy: string;
-    enableServiceLinks: boolean;
-    nodeName: string;
-    preemptionPolicy: string;
-    priority: number;
-    restartPolicy: string;
-    schedulerName: string;
-    securityContext: {
-      fsGroup: number;
-      runAsGroup: number;
-      runAsNonRoot: boolean;
-      runAsUser: number;
-    };
-    serviceAccount: string;
-    serviceAccountName: string;
-    terminationGracePeriodSeconds: number;
-    tolerations: {
-      effect: string;
-      key: string;
-      operator: string;
-      tolerationSeconds: number;
-    }[];
-    volumes: {
-      configMap?: {
-        defaultMode: number;
-        name: string;
-      };
-      emptyDir?: {};
-      name: string;
-      projected?: {
-        defaultMode: number;
-        sources: {
-          serviceAccountToken?: {
-            expirationSeconds: number;
-            path: string;
-          };
-          configMap?: {
-            items: {
-              key: string;
-              path: string;
-            }[];
-          };
-        }[];
-      };
-    }[];
-  };
-  status: {
-    conditions: {
-      lastProbeTime: string | null;
-      lastTransitionTime: string;
-      status: string;
-      type: string;
-    }[];
-    containerStatuses: {
-      containerID: string;
-      image: string;
-      imageID: string;
-      lastState: {
-        terminated: {
-          containerID: string;
-          exitCode: number;
-          finishedAt: string;
-          reason: string;
-          startedAt: string;
-        };
-      };
-      name: string;
-      ready: boolean;
-      restartCount: number;
-      started: boolean;
-      state: {
-        running: {
-          startedAt: string;
-        };
-      };
-    }[];
-    hostIP: string;
-    phase: string;
-    podIP: string;
-    podIPs: {
-      ip: string;
-    }[];
-    qosClass: string;
-    startTime: string;
-  };
-};
-
-export type containerObject = {
-  env?: {
-    name?: string;
-    value?: string;
+export interface containerObject {
+  env?: Array<{
+    name?: string
+    value?: string
     valueFrom?: {
       fieldRef?: {
-        apiVersion?: string;
-        fieldPath?: string;
-      };
+        apiVersion?: string
+        fieldPath?: string
+      }
       secretKeyRef?: {
-        key?: string;
-        name?: string;
-      };
-    };
-  }[];
-  image: string;
-  imagePullPolicy: string;
+        key?: string
+        name?: string
+      }
+    }
+  }>
+  image?: string
+  imagePullPolicy?: string
   livenessProbe?: {
-    failureThreshold: number;
+    failureThreshold: number
     httpGet: {
-      path: string;
-      port: number;
-      scheme: string;
-    };
-    initialDelaySeconds: number;
-    periodSeconds: number;
-    successThreshold: number;
-    timeoutSeconds: number;
-  };
-  name: string;
-  ports: {
-    containerPort: number;
-    name: string;
-    protocol: string;
-  }[];
+      path: string
+      port: number
+      scheme: string
+    }
+    initialDelaySeconds: number
+    periodSeconds: number
+    successThreshold: number
+    timeoutSeconds: number
+  }
+  name?: string
+  ports?: Array<{
+    containerPort?: number
+    name?: string
+    protocol?: string
+  }>
   readinessProbe?: {
-    failureThreshold: number;
-    httpGet: {
-      path: string;
-      port: number;
-      scheme: string;
-    };
-    periodSeconds: number;
-    successThreshold: number;
-    timeoutSeconds: number;
-  };
-  resources: {};
-  securityContext: {
-    allowPrivilegeEscalation: boolean;
+    failureThreshold?: number
+    httpGet?: {
+      path: string
+      port: number
+      scheme: string
+    }
+    periodSeconds?: number
+    successThreshold?: number
+    timeoutSeconds?: number
+  }
+  resources?: Record<string, unknown> // -> ???
+  securityContext?: {
+    allowPrivilegeEscalation: boolean
     capabilities: {
-      drop: string[];
-    };
+      drop: string[]
+    }
     seccompProfile: {
-      type: string;
-    };
-  };
-  terminationMessagePath: string;
-  terminationMessagePolicy: string;
-  volumeMounts: {
-    mountPath: string;
-    name: string;
-    subPath?: string;
-    readOnly?: boolean;
-  }[];
-};
-
-export type newPodObject = {
-  nodeName: string;
-  podName: string;
-  uid: string;
-  containers: containerObject[];
-  hostIP: string;
-  phase: string;
-  podIPs: {ip: string}[]
+      type: string
+    }
+  }
+  terminationMessagePath?: string
+  terminationMessagePolicy?: string
+  volumeMounts?: Array<{
+    mountPath: string
+    name: string
+    subPath?: string
+    readOnly?: boolean
+  }>
 }
 
-export type nodeObject = {
-  metadata: {
-    annotations: {
-      [key: string]: string;
-    };
-    creationTimestamp: string;
-    labels: {
-      [key: string]: string;
-    };
-    managedFields: {
-      apiVersion: string;
-      fieldsType: string;
-      fieldsV1: {
-        [key: string]: {
-          [key: string]: {
-            [key: string]: {
-              [key: string]: {
-                [key: string]: {
-                  [key: string]: {
-                    [key: string]: {
-                      [key: string]: string;
-                    };
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-      manager: string;
-      operation: string;
-      time: string;
-      subresource?: string;
-    }[];
-    name: string;
-    resourceVersion: string;
-    uid: string;
-  };
-  spec: {
-    podCIDR: string;
-    podCIDRs: string[];
-  };
-  status: {
-    addresses: {
-      address: string;
-      type: string;
-    }[];
-    allocatable: allocatableObject,
-    capacity: capacityObject;
-    conditions: {
-      lastHeartbeatTime: string;
-      lastTransitionTime: string;
-      message: string;
-      reason: string;
-      status: string;
-      type: string;
-    }[];
-    daemonEndpoints: {
-      kubeletEndpoint: {
-        Port: number;
-      };
-    };
-    images: {
-      names: string[];
-      sizeBytes: number;
-    }[];
-    nodeInfo: {
-      bootID: string;
-    };
-  };
-};
-
-export type newNodeObject = {
-  name: string,
-  uid: string,
-  podCIDRs: string[],
-  addresses: addressObject[],
-  allocatable: allocatableObject,
-  capacity: capacityObject,
-  images: imagesObject[]
+export interface newPodObject {
+  nodeName: string | undefined
+  podName: string | undefined
+  uid: string | undefined
+  containers: V1Container[] | undefined
+  hostIP: string | undefined
+  phase: string | undefined
+  podIPs: V1PodIP[] | undefined
 }
 
-export type nodeObjectList = {
-  [nodeName: string] : newNodeObject
+export interface newNodeObject {
+  name: string | undefined
+  uid: string | undefined
+  podCIDRs: string[] | undefined
+  addresses: addressObject[] | undefined
+  allocatable: Record<string, string> | undefined
+  // allocatable: allocatableObject
+  capacity: Record<string, string> | undefined
+  // capacity: capacityObject
+  images: V1ContainerImage[] | undefined
 }
 
-export type addressObject = {
-  address: string;
-  type: string;
+export type nodeObjectList = Record<string, newNodeObject>
+
+export interface addressObject {
+  address: string
+  type: string
 }
 
-export type allocatableObject = {
-  cpu: string,
-  'ephemeral-storage': string,
-  'hugepages-1Gi': string,
-  'hugepages-2Mi': string,
-  'hugepages-32Mi': string,
-  'hugepages-64Ki': string,
-  memory: string,
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+export interface allocatableObject {
+  cpu: string
+  'ephemeral-storage': string
+  'hugepages-1Gi': string
+  'hugepages-2Mi': string
+  'hugepages-32Mi': string
+  'hugepages-64Ki': string
+  memory: string
   pods: string
 }
 
-export type capacityObject = {
-  cpu: string,
-  'ephemeral-storage': string,
-  'hugepages-1Gi': string,
-  'hugepages-2Mi': string,
-  'hugepages-32Mi': string,
-  'hugepages-64Ki': string,
-  memory: string,
+// export type allocatableObject = Record<string, string>
+
+export interface capacityObject {
+  cpu: string
+  'ephemeral-storage': string
+  'hugepages-1Gi': string
+  'hugepages-2Mi': string
+  'hugepages-32Mi': string
+  'hugepages-64Ki': string
+  memory: string
   pods: string
 }
 
-export type nodeCardProps = {
-  key: string;
-  name: string;
-  uid: string;
-  podCIDRs: string[];
-  addresses: addressObject[];
-  allocatable: allocatableObject;
-  capacity: capacityObject;
-  images: imagesObject[];
+export interface nodeCardProps {
+  key: string
+  name: string
+  uid: string
+  podCIDRs: string[]
+  addresses: addressObject[]
+  allocatable: Record<string, string> | undefined
+  capacity: Record<string, string> | undefined
+  images: V1ContainerImage[]
 }
 
-export type podCardProps = {
-  nodeName: string;
-  podName: string;
-  uid: string;
-  containers: containerObject[];
-  hostIP: string;
-  phase: string;
-  podIPs: {ip: string}[]
+export interface podCardProps {
+  nodeName?: string
+  podName?: string
+  uid?: string
+  containers: V1Container[]
+  hostIP?: string
+  phase?: string
+  podIPs: V1PodIP[]
 }
 
-export type imagesObject = {
-  names: string[],
-  sizeBytes: number
-}
+// export interface imagesObject {
+//   names: string[]
+//   sizeBytes: number
+// }
 
-export type livenessProbeObject = {
-  failureThreshold?: number,
+export interface livenessProbeObject {
+  failureThreshold?: number
   httpGet?: {
-    path: string,
-    port: number,
+    path: string
+    port: number
     scheme: string
-  },
-  initialDelaySeconds?: number,
-  periodSeconds?: number, 
-  successThreshold?: number,
+  }
+  initialDelaySeconds?: number
+  periodSeconds?: number
+  successThreshold?: number
   timeoutSeconds?: number
 }
 
-export type volumeMounts = {
-  mountPath: string,
-  name: string,
+export interface volumeMount {
+  mountPath: string
+  name: string
+  subPath?: string
+  readOnly?: boolean
 }

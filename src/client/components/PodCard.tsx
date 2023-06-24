@@ -1,10 +1,9 @@
-import React, { ReactNode, useRef } from 'react';
-import {
+import React from 'react';
+import type {
   podCardProps,
-  containerObject,
-  livenessProbeObject,
-  volumeMounts,
+  volumeMount
 } from '../../../types';
+import type { V1Container } from '@kubernetes/client-node';
 
 /**
  * PodCards: Takes in a props object of type podCardProp and renders
@@ -12,12 +11,18 @@ import {
  * renderContainer() employs renderLivenessProbe() and renderVolumeMounts() to
  * render all various forms of pod data.
  * renderLivenessProbe() and renderVolumeMounts() to render special objects
- * . The 
+ * . The
  * `toggleContainerDisplay` function is used to toggle the display of
  * additional container information when a button is clicked.
  */
 
-function PodCard(props: podCardProps) {
+// type mountInfoType = Record<string, string>;
+// type mountInfoMap = Array<{
+//   name: string
+//   mountPath: string
+// }>;
+
+function PodCard (props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
 
   const phaseStatusToColor = () => {
@@ -28,79 +33,76 @@ function PodCard(props: podCardProps) {
     return <ul style={{ color: textColor }}>{phase}</ul>;
   };
 
-  const renderContainer = (container: containerObject) => {
+  const renderContainer = (container: V1Container) => {
     // create rendering logic object with rendering functions as key/value pairs
-    const renderingLogic: { [key: string]: (value: any) => JSX.Element } = {
-      livenessProbe: renderLivenessProbe,
-      volumeMounts: renderVolumeMounts,
-    };
+    // const renderingLogic: Record<string, (value: typeof renderLivenessProbe | typeof renderVolumeMounts) => livenessProbeObject | volumeMounts> = {
+    //   livenessProbe: renderLivenessProbe,
+    //   volumeMounts: renderVolumeMounts
+    // };
 
     // initialize container array
-    const contArr = [];
+    const contArr: JSX.Element[] = [];
 
     // iterate over container object with for...in
     for (const key in container) {
-      if (key === "resources" || key === 'command' || key === 'args') { // resources and command contain extremely long values / aren't important
+      if (key === 'resources' || key === 'command' || key === 'args') {
+        // resources and command contain extremely long values / aren't important
         continue;
       }
-      // check if object has own property to make sure key exists on the container object
-      if (Object.prototype.hasOwnProperty.call(container, key)) {
-        // initialize value const and assign it to container[key]
-        const value = container[key as keyof containerObject];
+      // initialize value const and assign it to container[key]
+      const value: any = container[key as keyof V1Container];
 
-        // initialize rendered value to return later
-        let renderedValue;
+      // initialize rendered value to return later
+      let renderedValue;
 
-        // check for objects and arrays types
-        if (typeof value === 'object' && value !== null) {
-          // handle the arrays
-          if (Array.isArray(value) && typeof value[0] !== 'object') {
-            // need to make sure it is not an array of objects here
-            // map over array and create list items within ul tag
-            renderedValue = (
+      // check for objects and arrays types
+      if (typeof value === 'object' && value !== null) {
+        // handle the arrays
+        if (Array.isArray(value) && typeof value[0] !== 'object') {
+          // need to make sure it is not an array of objects here
+          // map over array and create list items within ul tag
+          renderedValue = (
               <>
                 {value.map((item, index) => (
                   <ul key={index}>{item}</ul>
                 ))}
               </>
-            );
-          } else {
-            // handle objects
-            // invoke appropriate renderingLogic function and store function body in renderingFunction
-            if (key === 'volumeMounts' || key === 'livenessProbe') {
-              const renderingFunction = renderingLogic[key];
-              // invoke rendering function w/ given value passed in and store evaluated output in renderedValue
-              renderedValue = renderingFunction(value);
-            }
-          }
+          );
         } else {
-          // handle scalar values aka primitive data
-          renderedValue = <ul>{`${key}: ${value}`}</ul>;
+          // handle objects
+          // invoke appropriate renderingLogic function and store function body in renderingFunction
+          if (key === 'volumeMounts') {
+            renderedValue = renderVolumeMounts(value);
+          }
         }
-        // push renderedValue to contArr
-        if (renderedValue) {
-          contArr.push(<>{renderedValue}</>)
-        }
+      } else {
+        // handle scalar values aka primitive data
+        renderedValue = <ul>{value}</ul>;
+      }
+      // push renderedValue to contArr
+      if (renderedValue !== null) {
+        contArr.push(<>{renderedValue}</>);
       }
     }
     // return container array
     return contArr;
   };
 
-  const renderLivenessProbe = (value: livenessProbeObject) => {
-    return (
-      <>
-        Liveness Probe:
-        {Object.entries(value).map(([subKey, subVal]) => (
-          <ul key={subKey}>
-            {subKey}: {`${subVal}`}
-          </ul>
-        ))}
-      </>
-    );
-  };
+  // const renderLivenessProbe = (value: livenessProbeObject) => {
+  //   return (
+  //     <>
+  //       Liveness Probe:
+  //       {Object.entries(value).map(([subKey, subVal]: [string, string | number]) => (
+  //         <ul key={subKey}>
+  //           { /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */ }
+  //           {subKey}: {subVal}
+  //         </ul>
+  //       ))}
+  //     </>
+  //   );
+  // };
 
-  const renderVolumeMounts = (value: volumeMounts[]) => {
+  const renderVolumeMounts = (value: volumeMount[]) => {
     return (
       <>
         Volume Mounts:
@@ -117,24 +119,28 @@ function PodCard(props: podCardProps) {
 
   const containerArrToText = () =>
     // iterate over flattened containers array
-    containers.flatMap((container: containerObject, index) => {
+    containers.flatMap((container: V1Container) => {
       // invoke renderContainer with container passed in
       const renderedContainer = renderContainer(container);
       // store evaluated output in renderedContainer and return it
       return renderedContainer;
     });
 
-  const toggleContainerDisplay = () => { // TODO
-    // DOM manipulation because my brain is fried (pleae change future owen)
-    const hiddenContainers = document.getElementsByClassName('display-more');
-    console.log(hiddenContainers);
-    Array.from(hiddenContainers).forEach((containerText) => {
-      console.log(containerText);
-      // containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
-    });
-  };
+  // const toggleContainerDisplay = () => {
+  //   // TODO
+  //   // DOM manipulation because my brain is fried (pleae change future owen)
+  //   const hiddenContainers = document.getElementsByClassName('display-more');
+  //   console.log(hiddenContainers);
+  //   Array.from(hiddenContainers).forEach((containerText) => {
+  //     console.log(containerText);
+  //     // containerText.style.display = containerText.style.display === 'none' ? 'inline' : 'none';
+  //   });
+  // };
 
-  const renderPodIps = () => podIPs.map((ipAddresses) => <ul>{ ipAddresses.ip }</ul>)
+  const renderPodIps = () =>
+    podIPs.map((ipAddresses, index) => (
+      <ul key={`ip${index}`}>{ipAddresses.ip}</ul>
+    ));
 
   return (
     <div className="pod-card">
@@ -143,11 +149,11 @@ function PodCard(props: podCardProps) {
       {phaseStatusToColor()}
       <ul>{nodeName}</ul>
       <ul>{hostIP}</ul>
-      <hr className='light-hr' />
+      <hr className="light-hr" />
       {containerArrToText()}
       {/* <button onClick={toggleContainerDisplay}>show more</button> */}
-      <hr className='light-hr' />
-      <ul>Pod IPs:</ul> 
+      <hr className="light-hr" />
+      <ul>Pod IPs:</ul>
       <ul>{renderPodIps()}</ul>
     </div>
   );

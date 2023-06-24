@@ -18,18 +18,18 @@ const router = createHashRouter([
     children: [
       {
         path: '/',
-        element: <ViewStructure />,
+        element: <ViewStructure />
       },
       {
         path: '/namespace',
-        element: <ViewNamespace />,
+        element: <ViewNamespace />
       },
       {
         path: '/cluster',
-        element: <ViewCluster />,
-      },
-    ],
-  },
+        element: <ViewCluster />
+      }
+    ]
+  }
 ]);
 
 const App = () => {
