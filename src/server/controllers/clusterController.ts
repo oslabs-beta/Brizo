@@ -138,7 +138,6 @@ const clusterController: clusterControllerType = {
 
       // store namespace list on res.locals
       res.locals.namespaceList = namespaceList;
-
       // move to next middleware
       next();
     } catch (error) {

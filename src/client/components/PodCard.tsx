@@ -1,10 +1,10 @@
-import React, { ReactNode, useRef } from 'react';
+import React from 'react';
 import type {
-  podCardProps
-  // containerObject,
-  // livenessProbeObject,
-  // volumeMounts
+  podCardProps,
+  livenessProbeObject,
+  volumeMount
 } from '../../../types';
+import type { V1Container } from '@kubernetes/client-node';
 
 /**
  * PodCards: Takes in a props object of type podCardProp and renders
@@ -17,17 +17,11 @@ import type {
  * additional container information when a button is clicked.
  */
 
-type mountInfoMap = Array<{
-  index: number
-  value: string
-  array: []
-  name: string
-  mountPath: string
-}>;
-
-type containerObject = Record<string, any>;
-
-type livenessProbeObject = Record<string, any>;
+// type mountInfoType = Record<string, string>;
+// type mountInfoMap = Array<{
+//   name: string
+//   mountPath: string
+// }>;
 
 function PodCard (props: podCardProps) {
   const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
@@ -40,7 +34,7 @@ function PodCard (props: podCardProps) {
     return <ul style={{ color: textColor }}>{phase}</ul>;
   };
 
-  const renderContainer = (container: containerObject) => {
+  const renderContainer = (container: V1Container) => {
     // create rendering logic object with rendering functions as key/value pairs
     // const renderingLogic: Record<string, (value: typeof renderLivenessProbe | typeof renderVolumeMounts) => livenessProbeObject | volumeMounts> = {
     //   livenessProbe: renderLivenessProbe,
@@ -56,62 +50,58 @@ function PodCard (props: podCardProps) {
         // resources and command contain extremely long values / aren't important
         continue;
       }
-      // check if object has own property to make sure key exists on the container object
-      if (Object.prototype.hasOwnProperty.call(container, key)) {
-        // initialize value const and assign it to container[key]
-        const value = container[key];
+      // initialize value const and assign it to container[key]
+      const value: any = container[key as keyof V1Container];
 
-        // initialize rendered value to return later
-        let renderedValue;
+      // initialize rendered value to return later
+      let renderedValue;
 
-        // check for objects and arrays types
-        if (typeof value === 'object' && value !== null) {
-          // handle the arrays
-          if (Array.isArray(value) && typeof value[0] !== 'object') {
-            // need to make sure it is not an array of objects here
-            // map over array and create list items within ul tag
-            renderedValue = (
+      // check for objects and arrays types
+      if (typeof value === 'object' && value !== null) {
+        // handle the arrays
+        if (Array.isArray(value) && typeof value[0] !== 'object') {
+          // need to make sure it is not an array of objects here
+          // map over array and create list items within ul tag
+          renderedValue = (
               <>
                 {value.map((item, index) => (
                   <ul key={index}>{item}</ul>
                 ))}
               </>
-            );
-          } else {
-            // handle objects
-            // invoke appropriate renderingLogic function and store function body in renderingFunction
-            if (key === 'volumeMounts' || key === 'livenessProbe') {
-              // const renderingFunction = renderingLogic[key];
-              // invoke rendering function w/ given value passed in and store evaluated output in renderedValue
-              // renderedValue = renderingFunction(value);
-              console.log(value);
-              if (key === 'volumeMounts') {
-                renderedValue = renderVolumeMounts(value);
-              } else if (key === 'livenessProbe') {
-                renderedValue = renderLivenessProbe(value);
-              }
+          );
+        } else {
+          // handle objects
+          // invoke appropriate renderingLogic function and store function body in renderingFunction
+          if (key === 'volumeMounts' || key === 'livenessProbe') {
+            // const renderingFunction = renderingLogic[key];
+            // invoke rendering function w/ given value passed in and store evaluated output in renderedValue
+            // renderedValue = renderingFunction(value);
+
+            if (key === 'volumeMounts') {
+              renderedValue = renderVolumeMounts(value);
+            } else if (key === 'livenessProbe') {
+              renderedValue = renderLivenessProbe(value);
             }
           }
-        } else {
-          // handle scalar values aka primitive data
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          renderedValue = <ul>{`${key}: ${value}`}</ul>;
         }
-        // push renderedValue to contArr
-        if (renderedValue !== null) {
-          contArr.push(<>{renderedValue}</>);
-        }
+      } else {
+        // handle scalar values aka primitive data
+        renderedValue = <ul>{value}</ul>;
+      }
+      // push renderedValue to contArr
+      if (renderedValue !== null) {
+        contArr.push(<>{renderedValue}</>);
       }
     }
     // return container array
     return contArr;
   };
 
-  const renderLivenessProbe = (value: livenessProbeObject[]) => {
+  const renderLivenessProbe = (value: livenessProbeObject) => {
     return (
       <>
         Liveness Probe:
-        {Object.entries(value).map(([subKey, subVal]) => (
+        {Object.entries(value).map(([subKey, subVal]: [string, string | number]) => (
           <ul key={subKey}>
             { /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */ }
             {subKey}: {`${subVal[subKey]}`}
@@ -121,7 +111,7 @@ function PodCard (props: podCardProps) {
     );
   };
 
-  const renderVolumeMounts = (value: mountInfoMap) => {
+  const renderVolumeMounts = (value: volumeMount[]) => {
     return (
       <>
         Volume Mounts:
@@ -138,7 +128,7 @@ function PodCard (props: podCardProps) {
 
   const containerArrToText = () =>
     // iterate over flattened containers array
-    containers.flatMap((container: containerObject, index) => {
+    containers.flatMap((container: V1Container) => {
       // invoke renderContainer with container passed in
       const renderedContainer = renderContainer(container);
       // store evaluated output in renderedContainer and return it

@@ -6,11 +6,11 @@ const router = express.Router();
 
 // get request for namespace list
 router.get(
-  '/namespace',
+  '/namespaces',
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   clusterController.getNamespaces,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.filteredNodeList);
+    res.status(200).json(res.locals.namespaceList);
   }
 );
 

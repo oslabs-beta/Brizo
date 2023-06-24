@@ -51,6 +51,7 @@ const ViewStructure = () => {
   };
   // CREATE NAMESPACE COMPONENTS
   const createNamespaceComponents = (namespaceArray: namespaceObject[]) => {
+    console.log('namespace array: ', namespaceArray);
     const buttons = namespaceArray.map((namespaceObject: namespaceObject, index) => (
       <button
         key={`${namespaceObject.name}`}
@@ -70,25 +71,38 @@ const ViewStructure = () => {
     const mappedNodes = nodeData.map((node) => {
       return (
         <NodeCard
-        key={`${node.name}`}
-        name={`${node.name}`}
-        uid={`${node.uid}`}
-        podCIDRs={node.podCIDRs}
-        addresses={node.addresses}
+        key={node.name ?? ''}
+        name={node.name ?? ''}
+        uid={node.uid ?? ''}
+        podCIDRs={node.podCIDRs ?? []}
+        addresses={node.addresses ?? []}
         allocatable={node.allocatable}
         capacity={node.capacity}
-        images={node.images}
-       />);
+        images={node.images ?? []}
+        />);
     });
     setNodeCards(mappedNodes);
   };
 
   const createPodComponents = (podData: newPodObject[]) => {
-    const mappedPods: JSX.Element[] = [];
-    console.log(podData);
-    // for (const key in podData) {
-    //   // const value = podData[key as keyof newPodObject];
-    //   const currPod = podData[key];
+    const mappedPods: JSX.Element[] = podData.map((newPodObject) => {
+      return (
+        <PodCard
+          key={newPodObject.nodeName}
+          containers={newPodObject.containers ?? []}
+          hostIP={newPodObject.hostIP}
+          nodeName={newPodObject.nodeName}
+          phase={newPodObject.phase}
+          podIPs={newPodObject.podIPs ?? []}
+          podName={newPodObject.podName}
+          uid={newPodObject.uid}
+        />
+      );
+    }
+
+    );
+    // for (const key of podData) {
+    //   const currPod = podData[key as keyof newPodObject];
     //   mappedPods.push(
     //     <PodCard
     //       key={`${key}${currPod.nodeName}`}

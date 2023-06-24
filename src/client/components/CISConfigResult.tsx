@@ -31,7 +31,7 @@ function CISConfigResult (props: benchResult) {
           {summary.map((summaryText: string, index) => {
             return (
               <div key={index}>
-                {renderResult(summaryText)}z
+                {renderResult(summaryText)}
               </div>
             );
           })}

@@ -215,7 +215,7 @@ right: 0;
   color: $darkTextColor;
   padding: 10px;
   padding-bottom: 20px;
-  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.2);;
+  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.2);
   h3 {
     margin: 0;
   }
@@ -238,6 +238,7 @@ right: 0;
 
 .config-result-container {
   margin: 0;
+  text-align: left;
   p {
     margin: 0;
   }

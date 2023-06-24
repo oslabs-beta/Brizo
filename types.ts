@@ -118,7 +118,9 @@ export interface newNodeObject {
   podCIDRs: string[] | undefined
   addresses: addressObject[] | undefined
   allocatable: Record<string, string> | undefined
+  // allocatable: allocatableObject
   capacity: Record<string, string> | undefined
+  // capacity: capacityObject
   images: V1ContainerImage[] | undefined
 }
 
@@ -129,6 +131,7 @@ export interface addressObject {
   type: string
 }
 
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface allocatableObject {
   cpu: string
   'ephemeral-storage': string
@@ -139,6 +142,8 @@ export interface allocatableObject {
   memory: string
   pods: string
 }
+
+// export type allocatableObject = Record<string, string>
 
 export interface capacityObject {
   cpu: string
@@ -157,25 +162,25 @@ export interface nodeCardProps {
   uid: string
   podCIDRs: string[]
   addresses: addressObject[]
-  allocatable: allocatableObject
-  capacity: capacityObject
-  images: imagesObject[]
+  allocatable: Record<string, string> | undefined
+  capacity: Record<string, string> | undefined
+  images: V1ContainerImage[]
 }
 
 export interface podCardProps {
-  nodeName: string
-  podName: string
-  uid: string
-  containers: containerObject[]
-  hostIP: string
-  phase: string
-  podIPs: Array<{ ip: string }>
+  nodeName?: string
+  podName?: string
+  uid?: string
+  containers: V1Container[]
+  hostIP?: string
+  phase?: string
+  podIPs: V1PodIP[]
 }
 
-export interface imagesObject {
-  names: string[]
-  sizeBytes: number
-}
+// export interface imagesObject {
+//   names: string[]
+//   sizeBytes: number
+// }
 
 export interface livenessProbeObject {
   failureThreshold?: number
@@ -190,9 +195,9 @@ export interface livenessProbeObject {
   timeoutSeconds?: number
 }
 
-export type volumeMounts = Array<{
+export interface volumeMount {
   mountPath: string
   name: string
   subPath?: string
   readOnly?: boolean
-}>
+}

@@ -1,12 +1,9 @@
-// ------------------TYPESCRIPT IMPORTS------------------//
+// ------------------IMPORTS------------------//
 import express from 'express';
 import type { Request, Response, NextFunction } from 'express';
 import type { ServerError } from '../../types';
 import apiRouter from '../server/routers/apiRouter';
-
-// ------------------REQUIRES------------------//
-// require path
-const path = require('path');
+import path from 'path';
 
 // ------------------SET UP EXPRESS APP------------------//
 // declare port
