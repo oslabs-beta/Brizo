@@ -1,7 +1,6 @@
 import React from 'react';
 import type {
   podCardProps,
-  livenessProbeObject,
   volumeMount
 } from '../../../types';
 import type { V1Container } from '@kubernetes/client-node';
@@ -72,16 +71,8 @@ function PodCard (props: podCardProps) {
         } else {
           // handle objects
           // invoke appropriate renderingLogic function and store function body in renderingFunction
-          if (key === 'volumeMounts' || key === 'livenessProbe') {
-            // const renderingFunction = renderingLogic[key];
-            // invoke rendering function w/ given value passed in and store evaluated output in renderedValue
-            // renderedValue = renderingFunction(value);
-
-            if (key === 'volumeMounts') {
-              renderedValue = renderVolumeMounts(value);
-            } else if (key === 'livenessProbe') {
-              renderedValue = renderLivenessProbe(value);
-            }
+          if (key === 'volumeMounts') {
+            renderedValue = renderVolumeMounts(value);
           }
         }
       } else {
@@ -97,19 +88,19 @@ function PodCard (props: podCardProps) {
     return contArr;
   };
 
-  const renderLivenessProbe = (value: livenessProbeObject) => {
-    return (
-      <>
-        Liveness Probe:
-        {Object.entries(value).map(([subKey, subVal]: [string, string | number]) => (
-          <ul key={subKey}>
-            { /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */ }
-            {subKey}: {`${subVal[subKey]}`}
-          </ul>
-        ))}
-      </>
-    );
-  };
+  // const renderLivenessProbe = (value: livenessProbeObject) => {
+  //   return (
+  //     <>
+  //       Liveness Probe:
+  //       {Object.entries(value).map(([subKey, subVal]: [string, string | number]) => (
+  //         <ul key={subKey}>
+  //           { /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */ }
+  //           {subKey}: {subVal}
+  //         </ul>
+  //       ))}
+  //     </>
+  //   );
+  // };
 
   const renderVolumeMounts = (value: volumeMount[]) => {
     return (
