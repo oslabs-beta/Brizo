@@ -37,7 +37,8 @@ function CISConfigResult (props: benchResult) {
           })}
       </div>
       <div className='config-result-container'>
-        <button onClick={() => { setShowResults(!showResults); }}><i className="fa-solid fa-arrow-down" /> results <i className="fa-solid fa-arrow-down" /></button>
+          <button className='center-result-button' onClick={() => { setShowResults(!showResults); }}><i className="fa-solid fa-arrow-down" /> results <i className="fa-solid fa-arrow-down" /></button>
+          <div className='result-list-container'>
           {showResults && <> {
             testResults.map((results, index) => {
               return (
@@ -46,12 +47,13 @@ function CISConfigResult (props: benchResult) {
                 </p>
               );
             })
-          } </>}
+            } </>}
+            </div>
       </div>
       <div className='config-result-container'>
         {remediations.length > 0 &&
             <>
-              <button onClick={() => { setShowRemediations(!showRemediations); }}>
+              <button className='center-result-button' onClick={() => { setShowRemediations(!showRemediations); }}>
               <i className="fa-solid fa-arrow-down" /> remediations <i className="fa-solid fa-arrow-down" /></button>
             {showRemediations && <> { remediations.map((remedies, index) => (
               <p key={index}>

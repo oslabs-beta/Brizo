@@ -238,9 +238,10 @@ right: 0;
 
 .config-result-container {
   margin: 0;
-  text-align: left;
+  text-align: center;
   p {
     margin: 0;
+    text-align: left;
   }
 }
 
@@ -279,4 +280,9 @@ right: 0;
 
 .cis-container {
   gap: 10px;
+}
+
+.result-list-container {
+  padding-left: 5%;
+  padding-right: 5%;
 }
