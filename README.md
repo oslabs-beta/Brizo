@@ -3,16 +3,52 @@
   ![Brizo Banner](https://github.com/oslabs-beta/Brizo/blob/dev/assets/brizo-high-resolution-color-logo.png?raw=true)
 
 
-Brizo is a lightweight developer tool built from scratch to help developers monitor their kubernetes clusters. Prometheus and Grafana work together to monitor and display important cluster health metrics for a K8s cluster. Brizo also runs your cluster through CIS security testing standards to ensure proper cluster security.
+Brizo is a lightweight developer tool built from scratch to help developers monitor their kubernetes clusters. Prometheus and ChartJS work together to monitor and display important cluster health metrics for a K8s cluster. Brizo also runs your cluster through CIS security testing standards to ensure proper cluster security.
 
 <div align="center" style="display: flex; justify-content: center; align-items: center; gap: 25px;">
   <a href="https://reactjs.org/" rel="nofollow">
     <img src="https://camo.githubusercontent.com/ab4c3c731a174a63df861f7b118d6c8a6c52040a021a552628db877bd518fe84/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f72656163742d2532333230323332612e7376673f7374796c653d666f722d7468652d6261646765266c6f676f3d7265616374266c6f676f436f6c6f723d253233363144414642" data-canonical-src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" alt="ReactJs" style="max-width: 100%">
   </a>
-   <a href="https://typescriptlang.org/" rel="nofollow">
+  <a href="https://typescriptlang.org/" rel="nofollow">
     <img src="https://camo.githubusercontent.com/ee71fcc1aa3d059265517741dffc4161922fd744377e7a5f07c43381d0aa9aac/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f747970657363726970742d2532333030374143432e7376673f7374796c653d666f722d7468652d6261646765266c6f676f3d74797065736372697074266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="Typescript" style="max-width: 100%">
-</div>  
-
+  </a>
+  <a href="https://www.chartjs.org/" rel="nofollow">
+    <img src="https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white" alt="ChartJS" style="max-width:100%">
+  </a>
+  <a href="https://expressjs.com/" rel="nofollow">
+    <img src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB" alt="ExpressJS" style="max-width:100%">
+  </a>
+  <a href="https://www.npmjs.com/" rel="nofollow">
+    <img src="https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white" alt="NPM" style="max-width:100%">
+  </a>
+  <a href="https://reactrouter.com/en/main" rel="nofollow">
+    <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white" alt="React Router" style="max-width:100%">
+  </a>
+  <a href="https://sass-lang.com/" rel="nofollow">
+    <img src="https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white" alt="SASS" style="max-width:100%">
+  </a>
+  <a href="https://webpack.js.org/" rel="nofollow">
+    <img src="https://img.shields.io/badge/webpack-%238DD6F9.svg?style=for-the-badge&logo=webpack&logoColor=black" alt="Webpack" style="max-width:100%">
+  </a>
+  <a href="https://aws.amazon.com/" rel="nofollow">
+    <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS" style="max-width:100%">
+  </a>
+  <a href="https://www.apple.com/macos/" rel="nofollow">
+    <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOS" style="max-width:100%">
+  </a>
+  <a href="https://www.microsoft.com/en-us/windows" rel="nofollow">
+    <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" style="max-width:100%">
+  </a>
+  <a href="https://www.docker.com/" rel="nofollow">
+    <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" style="max-width:100%">
+  </a>
+  <a href="https://eslint.org/" rel="nofollow">
+    <img src="https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white" alt="Eslint" style="max-width:100%">
+  </a>
+  <a href="https://kubernetes.io/" rel="nofollow">
+    <img src="https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white" alt="kubernetes" style="max-width:100%">
+  </a>
+</div> 
 <br>  
 
 

@@ -12,14 +12,14 @@ function NodeCard (props: nodeCardProps) {
   const { name, uid, podCIDRs, addresses, allocatable, capacity, images } =
     props;
 
-  const addressList = addresses.map((address) => (
-    <ul key={`${uid}`}>
+  const addressList = addresses.map((address, index) => (
+    <ul key={`address${uid}${index}`}>
       {address.address} | {address.type}
     </ul>
   ));
   const imageList = images.map((imageObject, index) => {
     return (
-        <ul key={`${index}`}>
+        <ul key={`image${index}`}>
         {imageObject.names![1]} | size: {convertBytesToMB(imageObject.sizeBytes)}MB
         </ul>
     );
