@@ -447,7 +447,7 @@ const securityController = {
       the assigned property accounts for this
     */
 
-    // SECTION 4 INDICES
+    // SECTION INDICES
     const wnscStart: indexObjectType = {
       position: 0,
       assigned: false

@@ -32,7 +32,6 @@ const ViewStructure = () => {
     try {
       const response = await axios.get(`/api/cluster/pod/${selectedNamespace}`);
       const podsData = response.data;
-      console.log(podsData);
       createPodComponents(podsData);
     } catch (error) {
       console.error(error);
@@ -51,7 +50,6 @@ const ViewStructure = () => {
   };
   // CREATE NAMESPACE COMPONENTS
   const createNamespaceComponents = (namespaceArray: namespaceObject[]) => {
-    console.log('namespace array: ', namespaceArray);
     const buttons = namespaceArray.map((namespaceObject: namespaceObject, index) => (
       <button
         key={`${namespaceObject.name}`}
