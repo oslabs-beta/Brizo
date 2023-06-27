@@ -30,6 +30,11 @@ export interface allTestInfoType {
   totalSummary: string[]
 }
 
+export interface allTestInfoEKSType {
+  workerNodeSecurity: sectionResultsInfo
+  totalSummary: string[]
+}
+
 export interface namespaceObject {
   name: string
   uid: string

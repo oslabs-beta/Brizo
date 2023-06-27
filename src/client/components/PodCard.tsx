@@ -30,15 +30,11 @@ function PodCard (props: podCardProps) {
     if (phase === 'Running' || phase === 'Succeeded') textColor = 'green';
     else if (phase === 'Pending') textColor = 'yellow';
     else textColor = 'red';
-    return <ul style={{ color: textColor }}>{phase}</ul>;
+    return <ul key={`${nodeName ?? ''}${textColor}`} style={{ color: textColor }}>{phase}</ul>;
   };
 
   const renderContainer = (container: V1Container) => {
     // create rendering logic object with rendering functions as key/value pairs
-    // const renderingLogic: Record<string, (value: typeof renderLivenessProbe | typeof renderVolumeMounts) => livenessProbeObject | volumeMounts> = {
-    //   livenessProbe: renderLivenessProbe,
-    //   volumeMounts: renderVolumeMounts
-    // };
 
     // initialize container array
     const contArr: JSX.Element[] = [];
@@ -63,8 +59,8 @@ function PodCard (props: podCardProps) {
           // map over array and create list items within ul tag
           renderedValue = (
               <>
-                {value.map((item, index) => (
-                  <ul key={index}>{item}</ul>
+                {value.map((item: string, index) => (
+                  <ul key={`${item}${index}`}>{item}</ul>
                 ))}
               </>
           );
@@ -77,7 +73,7 @@ function PodCard (props: podCardProps) {
         }
       } else {
         // handle scalar values aka primitive data
-        renderedValue = <ul>{value}</ul>;
+        renderedValue = <ul key={value}>{value}</ul>;
       }
       // push renderedValue to contArr
       if (renderedValue !== null) {
@@ -107,7 +103,7 @@ function PodCard (props: podCardProps) {
       <>
         Volume Mounts:
         {value.map((mountInfo, index) => (
-          <ul key={index}>
+          <ul key={`mountInfo${index}`}>
             Name: {mountInfo.name}
             <br />
             Mount Path: {mountInfo.mountPath}
@@ -147,14 +143,14 @@ function PodCard (props: podCardProps) {
       <h5>{podName}</h5>
       <h6>{uid}</h6>
       {phaseStatusToColor()}
-      <ul>{nodeName}</ul>
-      <ul>{hostIP}</ul>
+      <ul key={nodeName}>{nodeName}</ul>
+      <ul key={hostIP}>{hostIP}</ul>
       <hr className="light-hr" />
       {containerArrToText()}
       {/* <button onClick={toggleContainerDisplay}>show more</button> */}
       <hr className="light-hr" />
-      <ul>Pod IPs:</ul>
-      <ul>{renderPodIps()}</ul>
+      <ul key={'podIP'}>Pod IPs:</ul>
+      <ul key={'renderedPodIps'}>{renderPodIps()}</ul>
     </div>
   );
 }

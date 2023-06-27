@@ -1,15 +1,24 @@
 import type { Request, Response } from 'express';
 import express from 'express';
-import securityController from '../controllers/securityController';
+import localSecurityController from '../controllers/securityController';
 
 const router = express.Router();
 
 router.get(
-  '/cis',
+  '/local/cis',
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  securityController.runKubeBench,
+  localSecurityController.runKubeBenchLocal,
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.allTestInfo);
+  }
+);
+
+router.get(
+  '/eks/cis',
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  localSecurityController.runKubeBenchEKS,
+  (req: Request, res: Response) => {
+    res.status(200).json(res.locals.allTestInfoEKS);
   }
 );
 

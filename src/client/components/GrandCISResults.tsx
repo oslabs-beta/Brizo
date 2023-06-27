@@ -8,13 +8,15 @@ function GrandCISResults (props: CISSummary) {
   const { data } = props;
   data.shift(); // remove '=== Summary Total ==='
 
-  const renderResult = (resultText: string) => (
-    <>
-      <h5>{passedNumberFromTest(resultText)}</h5>
-      <br />
-      <p style={{ color: statusToColor(checkStatusFromTest(resultText)) }}>{checkStatusFromTest(resultText)}</p>
-    </>
-  );
+  const renderResult = (resultText: string) => {
+    return (
+      <>
+        <h5>{passedNumberFromTest(resultText)}</h5>
+        <br />
+        <p style={{ color: statusToColor(checkStatusFromTest(resultText)) }}>{checkStatusFromTest(resultText)}</p>
+      </>
+    );
+  };
 
   return (
     <div className='summary-container'>

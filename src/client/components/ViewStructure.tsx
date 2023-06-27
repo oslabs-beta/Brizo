@@ -27,17 +27,7 @@ const ViewStructure = () => {
       console.error(error);
     }
   };
-  // FETCH POD INFO
-  const fetchPod = async (selectedNamespace: string) => {
-    try {
-      const response = await axios.get(`/api/cluster/pod/${selectedNamespace}`);
-      const podsData = response.data;
-      console.log(podsData);
-      createPodComponents(podsData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
   // FETCH NODE INFO
   const fetchNode = async (selectedNamespace: string): Promise<void> => {
     try {
@@ -49,12 +39,23 @@ const ViewStructure = () => {
       console.error(error);
     }
   };
+
+  // FETCH POD INFO
+  const fetchPod = async (selectedNamespace: string) => {
+    try {
+      const response = await axios.get(`/api/cluster/pod/${selectedNamespace}`);
+      const podsData = response.data;
+      createPodComponents(podsData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // CREATE NAMESPACE COMPONENTS
   const createNamespaceComponents = (namespaceArray: namespaceObject[]) => {
-    console.log('namespace array: ', namespaceArray);
     const buttons = namespaceArray.map((namespaceObject: namespaceObject, index) => (
       <button
-        key={`${namespaceObject.name}`}
+        key={`${namespaceObject.name}${index}`}
         style={{ backgroundColor: 'white' }}
         id={`${namespaceObject.name}`}
         onClick={() => {
@@ -68,27 +69,29 @@ const ViewStructure = () => {
   };
   // CREATE NODE COMPONENTS
   const createNodeComponents = (nodeData: newNodeObject[]) => {
-    const mappedNodes = nodeData.map((node) => {
+    console.log(nodeData);
+    const mappedNodes = nodeData.map((node, index) => {
       return (
         <NodeCard
-        key={node.name ?? ''}
-        name={node.name ?? ''}
-        uid={node.uid ?? ''}
-        podCIDRs={node.podCIDRs ?? []}
-        addresses={node.addresses ?? []}
-        allocatable={node.allocatable}
-        capacity={node.capacity}
-        images={node.images ?? []}
+          key={`NodeCard${node.uid ?? ''}`}
+          name={node.name ?? ''}
+          uid={node.uid ?? ''}
+          podCIDRs={node.podCIDRs ?? []}
+          addresses={node.addresses ?? []}
+          allocatable={node.allocatable}
+          capacity={node.capacity}
+          images={node.images ?? []}
         />);
     });
     setNodeCards(mappedNodes);
   };
 
   const createPodComponents = (podData: newPodObject[]) => {
-    const mappedPods: JSX.Element[] = podData.map((newPodObject) => {
+    console.log(podData);
+    const mappedPods: JSX.Element[] = podData.map((newPodObject, index) => {
       return (
         <PodCard
-          key={newPodObject.nodeName}
+          key={`${newPodObject.uid ?? ''}${index}`}
           containers={newPodObject.containers ?? []}
           hostIP={newPodObject.hostIP}
           nodeName={newPodObject.nodeName}
@@ -98,24 +101,8 @@ const ViewStructure = () => {
           uid={newPodObject.uid}
         />
       );
-    }
-
-    );
-    // for (const key of podData) {
-    //   const currPod = podData[key as keyof newPodObject];
-    //   mappedPods.push(
-    //     <PodCard
-    //       key={`${key}${currPod.nodeName}`}
-    //       containers={currPod.containers}
-    //       hostIP={currPod.hostIP}
-    //       nodeName={currPod.nodeName}
-    //       phase={currPod.phase}
-    //       podIPs={currPod.podIPs}
-    //       podName={currPod.podName}
-    //       uid={currPod.uid}
-    //     />
-    //   );
-    // }
+    });
+    setPodComponents([]);
     setPodComponents(mappedPods);
   };
 
