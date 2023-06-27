@@ -42,7 +42,7 @@ function CISConfigResult (props: benchResult) {
           {showResults && <> {
             testResults.map((results, index) => {
               return (
-                <p key={index}>
+                <p style={{ color: statusToColor(checkStatusFromTest(results)) }} key={index}>
                   {results}
                 </p>
               );
