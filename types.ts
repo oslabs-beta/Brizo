@@ -148,8 +148,6 @@ export interface allocatableObject {
   pods: string
 }
 
-// export type allocatableObject = Record<string, string>
-
 export interface capacityObject {
   cpu: string
   'ephemeral-storage': string
@@ -182,11 +180,6 @@ export interface podCardProps {
   podIPs: V1PodIP[]
 }
 
-// export interface imagesObject {
-//   names: string[]
-//   sizeBytes: number
-// }
-
 export interface livenessProbeObject {
   failureThreshold?: number
   httpGet?: {
@@ -205,4 +198,47 @@ export interface volumeMount {
   name: string
   subPath?: string
   readOnly?: boolean
+}
+
+export interface newPromObject {
+  container?: string
+  pod?: string
+  queryName?: string
+  name?: string
+  value?: string
+}
+
+export interface promQueryObject {
+  metric: {
+    __name__?: string
+    alpha_eksctl_io_cluster_name?: string
+    alpha_eksctl_io_nodegroup_name?: string
+    beta_kubernetes_io_arch?: string
+    beta_kubernetes_io_instance_type?: string
+    beta_kubernetes_io_os?: string
+    container?: string
+    eks_amazonaws_com_capacityType?: string
+    eks_amazonaws_com_nodegroup?: string
+    eks_amazonaws_com_nodegroup_image?: string
+    eks_amazonaws_com_sourceLaunchTemplateId?: string
+    eks_amazonaws_com_sourceLaunchTemplateVersion?: string
+    failure_domain_beta_kubernetes_io_region?: string
+    failure_domain_beta_kubernetes_io_zone?: string
+    id?: string
+    image?: string
+    instance?: string
+    job?: string
+    k8s_io_cloud_provider_aws?: string
+    kubernetes_io_arch?: string
+    kubernetes_io_hostname?: string
+    kubernetes_io_os?: string
+    name?: string
+    namespace?: string
+    node_kubernetes_io_instance_type?: string
+    pod?: string
+    topology_ebs_csi_aws_com_zone?: string
+    topology_kubernetes_io_region?: string
+    topology_kubernetes_io_zone?: string
+  }
+  value?: [number, string]
 }
