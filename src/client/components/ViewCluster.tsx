@@ -4,6 +4,12 @@ import GrandCISResults from './GrandCISResults';
 import CISConfigResult from './CISConfigResult';
 import Loading from './Loading';
 
+/**
+ * ViewCluster: Responsible for the /cluster or cluster button.
+ * Currently creates and displays the GrandCISResults and CISConfigResult components based on the returned data.
+ * ViewCluster will also be responsible for creating and displaying the results of the load balancing K6 tests.
+ */
+
 function ViewCluster () {
   const [totalCISResults, setTotalCISResults] = React.useState<JSX.Element>();
   const [controlPlaneConfiguration, setControlPlaneConfiguration] = React.useState<JSX.Element>();
@@ -13,6 +19,9 @@ function ViewCluster () {
   const [workerNodeSecurity, setWorkerNodeSecurity] = React.useState<JSX.Element>();
   const [displayLoadingGif, setDisplayLoadingGif] = React.useState(false);
 
+  /**
+   * Resets the display of various results and toggles the loading GIF off.
+   */
   const resetResultDisplay = () => {
     setTotalCISResults(undefined);
     setControlPlaneConfiguration(undefined);
@@ -23,6 +32,9 @@ function ViewCluster () {
     setDisplayLoadingGif(false);
   };
 
+  /**
+  * Fetches ! LOCAL ! CIS test data for a cluster and updates the state with the results for different components.
+  */
   const fetchLocalCISTest = async () => {
     try {
       // remove previous results
@@ -45,6 +57,10 @@ function ViewCluster () {
       console.error(error);
     }
   };
+
+  /**
+  * Fetches ! AMAZON EKS ! CIS test data for a cluster and updates the state with the results for different components.
+  */
 
   const fetchEKSCISTest = async () => {
     try {

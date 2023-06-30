@@ -6,6 +6,11 @@ import useAsyncEffect from 'use-async-effect';
 import type { namespaceObject, newNodeObject, newPodObject } from '../../../types';
 import axios from 'axios';
 
+/**
+ * ViewStructure: Responsible for the "homepage" or structure button.
+ * Creates and displays the Node and Pod card components based on the returned data from our GET requests.
+ */
+
 const ViewStructure = () => {
   const { namespaces, setNamespaces } = useNamespaces();
   const [namespaceButtons, setNamespaceButtons] = React.useState<JSX.Element[]>([]);
@@ -16,7 +21,10 @@ const ViewStructure = () => {
     await fetchNamespaces();
   }, []);
 
-  // FETCH NAMESPACES
+  /**
+   * GET request to '/api/cluster/namespaces', retrieves the list of namespaces, sets namespaces state with retrieved data, and calls the createNamespaceComponents function with the namespaces data.
+   * If an error occurs, it is logged to the console.
+ */
   const fetchNamespaces = async () => {
     try {
       const response = await axios.get('/api/cluster/namespaces');
@@ -28,7 +36,10 @@ const ViewStructure = () => {
     }
   };
 
-  // FETCH NODE INFO
+  /**
+   * GET request to '/api/cluster/node/${selectedNamespace}', passing in the  name of the namespace button clicked on, retrieves the list of nodes that belong to the namespace, and calls the createNodeComponents function with the node data.
+   * @param {string} selectedNamespace - The `selectedNamespace` parameter is a string that represents the namespace that is clicked on.
+   */
   const fetchNode = async (selectedNamespace: string): Promise<void> => {
     try {
       const response = await axios.get(`/api/cluster/node/${selectedNamespace}`);
@@ -40,7 +51,10 @@ const ViewStructure = () => {
     }
   };
 
-  // FETCH POD INFO
+  /**
+   * GET request to '/api/cluster/pod/${selectedNamespace}', passing in the  the name of the namespace provided by the fetchNode function, and then creates pod components based on the retrieved data.
+   * @param {string} selectedNamespace - The `selectedNamespace` parameter is a string that represents the namespace that is passed in from the fetchNode function.
+   */
   const fetchPod = async (selectedNamespace: string) => {
     try {
       const response = await axios.get(`/api/cluster/pod/${selectedNamespace}`);
@@ -51,7 +65,10 @@ const ViewStructure = () => {
     }
   };
 
-  // CREATE NAMESPACE COMPONENTS
+  /**
+   * Takes an array of `namespaceObject` and creates buttons for each object in the array. The button array is returned.
+   * @param {namespaceObject[]} namespaceArray - An array of objects representing namespaces. Each object should have a "name" property.
+  */
   const createNamespaceComponents = (namespaceArray: namespaceObject[]) => {
     const buttons = namespaceArray.map((namespaceObject: namespaceObject, index) => (
       <button
@@ -67,7 +84,10 @@ const ViewStructure = () => {
     ));
     setNamespaceButtons(buttons);
   };
-  // CREATE NODE COMPONENTS
+
+  /** Takes an array of `newNodeObject` and creates NodeCard components based on the data in each object. The created NodeCard component array is returned.
+   * @param {newNodeObject[]} nodeData - An array of objects representing nodes.
+  */
   const createNodeComponents = (nodeData: newNodeObject[]) => {
     console.log(nodeData);
     const mappedNodes = nodeData.map((node, index) => {
@@ -86,6 +106,9 @@ const ViewStructure = () => {
     setNodeCards(mappedNodes);
   };
 
+  /** Takes an array of `newPodObject` and creates PodCard components based on the data in each object. The created PodCard component array is returned.
+   * @param {newPodObject[]} podData - An array of objects representing pods.
+  */
   const createPodComponents = (podData: newPodObject[]) => {
     console.log(podData);
     const mappedPods: JSX.Element[] = podData.map((newPodObject, index) => {

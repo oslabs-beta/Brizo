@@ -7,6 +7,9 @@ interface benchResult {
   testName: string
 }
 
+/**
+ * Takes in a props object of type benchResult and renders a group of lists based on the keys of the object.
+ */
 function CISConfigResult (props: benchResult) {
   const { data, testName } = props;
   const { remediations, summary, testResults } = data;
@@ -14,6 +17,10 @@ function CISConfigResult (props: benchResult) {
   const [showRemediations, setShowRemediations] = useState(false);
   const [showResults, setShowResults] = useState(true);
   if (summary[0].includes('== Summary')) summary.shift();
+  /**
+   * Takes a string and returns JSX elements that display the number of tests that fall under the status and the status which is based on severity.
+   * @param {string} resultText - String that represents the result of the test.
+  */
   const renderResult = (resultText: string) => (
     <>
       <h5>{passedNumberFromTest(resultText)}</h5>

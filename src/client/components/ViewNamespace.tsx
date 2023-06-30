@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * ViewNamespace: Responsible for /namespace or namespace button.
+ * Displays the metrics for all of the pods and nodes in the namespace.
+ */
+
 function ViewNamespace () {
   return (
     <>
