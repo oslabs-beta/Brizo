@@ -21,20 +21,17 @@ const prometheusController = {
 
         // iterate over data results
         data.data.result.forEach((element: promQueryObject) => {
-          // make sure container property exists
-          if (element.metric.container !== undefined) {
-            // define new element to be pushed into array
-            const newElement: newPromObject = {
-              queryName: element.metric.__name__,
-              container: element.metric.container,
-              pod: element.metric.pod,
-              name: element.metric.name,
-              value: element.value![1]
-            };
+          // define new element to be pushed into array
+          const newElement: newPromObject = {
+            queryName: element.metric.__name__,
+            container: element.metric?.container,
+            pod: element.metric.pod,
+            name: element.metric.name,
+            value: element.value![1]
+          };
 
-            // push new element to array
-            defaultMetrics.push(newElement);
-          }
+          // push new element to array
+          defaultMetrics.push(newElement);
         });
       }
 
