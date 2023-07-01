@@ -5,7 +5,7 @@ import type {
 } from '../../../types';
 import type { V1Container } from '@kubernetes/client-node';
 import { podPhaseStatusToColor } from '../../../functions';
-
+import CopyUID from './CopyUID';
 /**
  * Takes in a props object of type podCardProp and renders a card representing a Kubernetes pod.
  */
@@ -104,7 +104,7 @@ function PodCard (props: podCardProps) {
   return (
     <div className="pod-card">
       <h5>{podName}</h5>
-      <h6>{uid}</h6>
+      <h6>{uid} <CopyUID uid={ uid } /></h6>
       <ul key={`${nodeName ?? ''}`} style={{ color: podPhaseStatusToColor(phase!) }}>{phase}</ul>
       <ul key={`${nodeName ?? ''}nodeName`}>{nodeName}</ul>
       <ul key={hostIP}>{hostIP}</ul>

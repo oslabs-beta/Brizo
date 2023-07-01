@@ -1,6 +1,6 @@
 import React from 'react';
 import type { nodeCardProps } from '../../../types';
-
+import CopyUID from './CopyUID';
 function NodeCard (props: nodeCardProps) {
   const convertKiToGB = (kiValue: string) =>
     Math.floor(parseInt(kiValue) / 976600);
@@ -28,7 +28,7 @@ function NodeCard (props: nodeCardProps) {
   return (
     <div className="card">
       <h3>{name}</h3>
-      <h4>{uid}</h4>
+      <h4>{uid} <CopyUID uid={uid} /></h4>
       <ul>podCIDRs: {podCIDRs}</ul>
       <ul>addresses:</ul>
       {addressList}

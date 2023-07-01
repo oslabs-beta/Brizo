@@ -292,3 +292,21 @@ right: 0;
   width: 40px;
 }
 
+.uid-button {
+  box-shadow: none;
+  transition: 100ms ease-in-out;
+  height: 100%;
+  padding: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border: none;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: none;
+    }
+  &:active {
+    transform: translateZ(100px);
+    background-color: #e0e7e5;
+  }
+}
+
