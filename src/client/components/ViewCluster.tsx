@@ -3,7 +3,7 @@ import axios from 'axios';
 import GrandCISResults from './GrandCISResults';
 import CISConfigResult from './CISConfigResult';
 import Loading from './Loading';
-
+import MissingCluster from './MissingCluster';
 /**
  * ViewCluster: Responsible for the /cluster or cluster button.
  * Currently creates and displays the GrandCISResults and CISConfigResult components based on the returned data.
@@ -18,7 +18,7 @@ function ViewCluster () {
   const [kubernetesPolicies, setKubernetesPolicies] = React.useState<JSX.Element>();
   const [workerNodeSecurity, setWorkerNodeSecurity] = React.useState<JSX.Element>();
   const [displayLoadingGif, setDisplayLoadingGif] = React.useState(false);
-
+  const [runningCluster, setRunningCluster] = React.useState(true);
   /**
    * Resets the display of various results and toggles the loading GIF off.
    */
@@ -54,6 +54,7 @@ function ViewCluster () {
       setWorkerNodeSecurity(<CISConfigResult data={data.workerNodeSecurity} testName={'Worker Node Security'} />);
     } catch (error) {
       setDisplayLoadingGif(false);
+      setRunningCluster(false);
       console.error(error);
     }
   };
@@ -77,11 +78,15 @@ function ViewCluster () {
       setWorkerNodeSecurity(<CISConfigResult data={data.workerNodeSecurity} testName={'Worker Node Security'} />);
     } catch (error) {
       setDisplayLoadingGif(false);
+      setRunningCluster(false);
       console.error(error);
     }
   };
 
-  return (
+  if (!runningCluster) {
+    return <MissingCluster />;
+  } else {
+    return (
     <>
       <div className="benchmark-buttons-container">
         <div className="benchmark-buttons">
@@ -103,7 +108,8 @@ function ViewCluster () {
         </div>
       </div>
     </>
-  );
+    );
+  }
 }
 
 export default ViewCluster;

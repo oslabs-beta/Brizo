@@ -1,11 +1,11 @@
 import React from 'react';
 import NodeCard from './NodeCard';
 import PodCard from './PodCard';
+import MissingCluster from './MissingCluster';
 import { useNamespaces } from './MainContainer';
 import useAsyncEffect from 'use-async-effect';
 import type { namespaceObject, newNodeObject, newPodObject } from '../../../types';
 import axios from 'axios';
-
 /**
  * ViewStructure: Responsible for the "homepage" or structure button.
  * Creates and displays the Node and Pod card components based on the returned data from our GET requests.
@@ -16,22 +16,24 @@ const ViewStructure = () => {
   const [namespaceButtons, setNamespaceButtons] = React.useState<JSX.Element[]>([]);
   const [nodeCards, setNodeCards] = React.useState<JSX.Element[]>([]);
   const [podComponents, setPodComponents] = React.useState<JSX.Element[]>([]);
-
+  const [runningCluster, setRunningCluster] = React.useState(true);
   useAsyncEffect(async () => {
     await fetchNamespaces();
   }, []);
 
   /**
    * GET request to '/api/cluster/namespaces', retrieves the list of namespaces, sets namespaces state with retrieved data, and calls the createNamespaceComponents function with the namespaces data.
-   * If an error occurs, it is logged to the console.
+   * If an error occurs during the process, the MissingCluster component will display itself and and error is logged to the console.
  */
   const fetchNamespaces = async () => {
     try {
       const response = await axios.get('/api/cluster/namespaces');
+      console.log(response);
       const namespacesData = response.data;
       setNamespaces(namespacesData);
       createNamespaceComponents(namespacesData);
     } catch (error) {
+      setRunningCluster(false);
       console.error(error);
     }
   };
@@ -129,7 +131,10 @@ const ViewStructure = () => {
     setPodComponents(mappedPods);
   };
 
-  return (
+  if (!runningCluster) {
+    return <MissingCluster />;
+  } else {
+    return (
     <>
       <div className='namespace-button-container'>
         {namespaceButtons}
@@ -144,7 +149,8 @@ const ViewStructure = () => {
         </div>
       </div>
     </>
-  );
+    );
+  }
 };
 
 export default ViewStructure;
