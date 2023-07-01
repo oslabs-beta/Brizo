@@ -20,7 +20,7 @@ export default function NavbarComponent () {
         <div style={{ display: 'flex' }}>
           <img className='navbar-logo' src="https://i.imgur.com/0i6SfgA.png" width='64px'/>
           <button onClick={() => { navigateTo('/'); }} className='primary-button'>structure</button>
-          {/* <button onClick={() => navigateTo('/namespace')} className='primary-button'>namespace metrics</button> */}
+          <button onClick={() => { navigateTo('/namespace'); }} className='primary-button'>namespace metrics</button>
           <button onClick={() => { navigateTo('/cluster'); }} className='primary-button'>cluster metrics</button>
         </div>
         <div>

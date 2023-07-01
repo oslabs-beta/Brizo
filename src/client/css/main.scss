@@ -16,11 +16,6 @@ html, body, #root {
   min-height: 100vh;
 }
 
-iframe {
-  border: none;
-  box-shadow: $standardBoxShadow;
-}
-
 body {
   padding: 20px;
   display: flex;
@@ -291,4 +286,3 @@ right: 0;
 .navbar-logo {
   width: 40px;
 }
-

@@ -45,7 +45,7 @@ function ViewCluster () {
       setDisplayLoadingGif(false);
       const data = response.data;
       // create grand summary component
-      setTotalCISResults(<GrandCISResults data={data.totalSummary}/>);
+      setTotalCISResults(<GrandCISResults data={data.totalSummary} />);
       // parse data for each component, passing in the test name for the title
       setControlPlaneConfiguration(<CISConfigResult data={data.controlPlaneConfiguration} testName={'Control Plane Configuration'} />);
       setControlPlaneSecurityConfiguration(<CISConfigResult data={data.controlPlaneSecurityConfiguration} testName={'Control Plane Security Configuration'} />);

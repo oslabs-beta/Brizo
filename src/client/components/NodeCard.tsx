@@ -1,13 +1,10 @@
 import React from 'react';
 import type { nodeCardProps } from '../../../types';
+import { convertBytesToMB } from '../../../functions';
 
 function NodeCard (props: nodeCardProps) {
   const convertKiToGB = (kiValue: string) =>
     Math.floor(parseInt(kiValue) / 976600);
-  const convertBytesToMB = (bytesValue: number | undefined) => {
-    if (bytesValue === undefined) return 0;
-    return Math.floor(bytesValue * 0.000001);
-  };
 
   const { name, uid, podCIDRs, addresses, allocatable, capacity, images } =
     props;
