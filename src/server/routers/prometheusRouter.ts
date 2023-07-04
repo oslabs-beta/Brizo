@@ -4,14 +4,23 @@ import prometheusController from '../controllers/prometheusController';
 
 const router = express.Router();
 
-// post request to grab default metrics
-// use post request so we can set request body to an array of strings to query prometheus
+// post request to grab static metrics
+// use post request so we can set request body to an array of strings to query prometheus with
 router.post(
-  '/metrics/default',
+  '/metrics/static',
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  prometheusController.getDefaultMetrics,
+  prometheusController.getStaticMetrics,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.defaultMetrics);
+    res.status(200).json(res.locals.staticMetrics);
+  }
+);
+
+router.post(
+  '/metrics/dynamic',
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  prometheusController.getDynamicMetrics,
+  (req: Request, res: Response) => {
+    res.status(200).json(res.locals.dynamicMetrics);
   }
 );
 

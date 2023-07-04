@@ -139,6 +139,7 @@ const ViewStructure = () => {
         <div className="card-container">
           {nodeCards}
         </div>
+        {podComponents.length > 0 && <><h1 style={{ margin: 0 }}>Pods</h1><hr /></>}
         <div className="pod-container">
           {podComponents}
         </div>

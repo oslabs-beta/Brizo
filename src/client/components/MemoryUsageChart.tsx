@@ -3,29 +3,20 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import useAsyncEffect from 'use-async-effect';
-import type { newPromObject } from '../../../types';
-interface datasetsType {
-  label: string
-  data: string[]
-}
-interface chartType {
-  labels: string[]
-  datasets: datasetsType[]
-}
+import type { chartType, datasetsType, newStaticPromObject, newDynamicPromObject } from '../../../types';
+import Loading from './Loading';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -33,34 +24,37 @@ ChartJS.register(
 
 const options = {
   responsive: true,
+  maintainAspectRatio: true,
   plugins: {
     legend: {
-      position: 'top' as const
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart'
+      display: false
     }
+  },
+  title: {
+    display: true,
+    text: 'Chart.js Bar Graph'
   }
 };
 
 const MemoryUsageChart = () => {
-  const [chartD, setChartD] = React.useState<chartType>({
-    labels: [''],
-    datasets: [{
-      label: '',
-      data: ['bruh']
-    }]
+  const [chartD, setChartD] = React.useState({
+    labels: [] as string[],
+    datasets: [
+      {
+        label: '',
+        data: [] as string[],
+        backgroundColor: '#eeeeee',
+        color: 'eeeeee'
+      }
+    ]
   });
-  const [haveData, setHaveData] = React.useState(false);
-  useAsyncEffect(async () => {
-    const response = await fetchData();
-    addData(response);
-  }, []);
 
-  // const updateInterval = 100;
+  const [haveData, setHaveData] = React.useState(false);
+
+  useAsyncEffect(async () => { await fetchData(); }, []);
+
   const fetchData = async () => {
-    const data = await fetch('/api/prom/metrics/default',
+    const data = await fetch('/api/prom/metrics/dynamic',
       {
         method: 'POST',
         headers: {
@@ -68,19 +62,35 @@ const MemoryUsageChart = () => {
         },
         body: JSON.stringify({ queries: ['container_memory_usage_bytes'] })
       });
-    const data2 = await data.json();
-    return data2;
+    const jsonData = await data.json();
+    addData(jsonData);
   };
 
-  const addData = (data: newPromObject[]) => {
-    setChartD({
-      labels: data.map((qresult) => qresult.name !== undefined ? qresult.name : ''),
-      datasets: [{
-        label: 'bruh',
-        data: data.map((qresult) => qresult.value !== undefined ? qresult.value : '')
-      }]
+  const addData = (data: newDynamicPromObject[]) => {
+    const labels: string[] = [];
+    const datasets: Array<{ label: string, data: string[], backgroundColor: string, color: string }> = [];
+
+    data.forEach((e) => {
+      if (!labels.includes(e.container!)) {
+        labels.push(e.container!);
+      }
+      console.log(e.container);
+      datasets.push({
+        label: e.container!,
+        data: [e.value!],
+        backgroundColor: '#eeeeee',
+        color: 'white'
+      });
     });
+    console.log(labels);
+    const updatedChartD = {
+      labels,
+      datasets
+    };
+
     setHaveData(true);
+    setChartD(updatedChartD);
+    console.log(updatedChartD);
   };
 
   if (!haveData) {
@@ -88,8 +98,8 @@ const MemoryUsageChart = () => {
   } else {
     return (
     <div>
-      <p>HELLO MEMEORY US</p>
-      <Line
+        <button onClick={() => { void fetchData(); }}>do sum crazy</button>
+      <Bar
         options={options}
         data={chartD}
         redraw={true}

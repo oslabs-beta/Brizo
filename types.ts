@@ -200,7 +200,7 @@ export interface volumeMount {
   readOnly?: boolean
 }
 
-export interface newPromObject {
+export interface newDynamicPromObject {
   container?: string
   pod?: string
   queryName?: string
@@ -208,7 +208,7 @@ export interface newPromObject {
   value?: string
 }
 
-export interface promQueryObject {
+export interface dynamicPromQueryObject {
   metric: {
     __name__?: string
     alpha_eksctl_io_cluster_name?: string
@@ -241,4 +241,43 @@ export interface promQueryObject {
     topology_kubernetes_io_zone?: string
   }
   value?: [number, string]
+}
+
+export interface staticPromQueryObject {
+  metric: {
+    __name__?: string
+    alpha_eksctl_io_cluster_name?: string
+    alpha_eksctl_io_nodegroup_name?: string
+    beta_kubernetes_io_arch?: string
+    beta_kubernetes_io_instance_type?: string
+    beta_kubernetes_io_os?: string
+    boot_id?: string
+    eks_amazonaws_com_capacityType?: string
+    eks_amazonaws_com_nodegroup?: string
+    eks_amazonaws_com_nodegroup_image?: string
+    eks_amazonaws_com_sourceLaunchTemplateId?: string
+    eks_amazonaws_com_sourceLaunchTemplateVersion?: string
+    failure_domain_beta_kubernetes_io_region?: string
+    failure_domain_beta_kubernetes_io_zone?: string
+    instance?: string
+    job?: string
+  }
+  value?: [number, string]
+}
+
+export interface newStaticPromObject {
+  name?: string
+  value?: string
+}
+
+export interface datasetsType {
+  label: string
+  data: string[]
+  backgroundColor: string
+  color?: string
+}
+
+export interface chartType {
+  labels: string[]
+  datasets: datasetsType[]
 }

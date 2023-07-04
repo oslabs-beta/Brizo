@@ -32,7 +32,7 @@ function PodCard (props: podCardProps) {
       // depending on the key, fire the correct render function, otherwise
       // the value is simply an array and so we map it to ul elements
       if (typeof value !== 'object') {
-        renderedValue = <ul key={value}>{value}</ul>;
+        renderedValue = <ul key={value}><u>{key}:</u> {value}</ul>;
       } else {
         if (key === 'volumeMounts') renderedValue = renderVolumeMounts(value);
         else if (Array.isArray(value) && typeof value[0] !== 'object') {
@@ -47,36 +47,25 @@ function PodCard (props: podCardProps) {
     }
     return contArr;
   };
-  /*
-  const renderLivenessProbe = (value: livenessProbeObject) => {
-    return (
-      <>
-        Liveness Probe:
-        {Object.entries(value).map(([subKey, subVal]: [string, string | number]) => (
-          <ul key={subKey}>
-            {subKey}: {subVal}
-          </ul>
-        ))}
-      </>
-    );
-  };
-*/
+
   /**
    * Takes in an aray of type `volumeMount` and maps them to ul elements
    * @param value - Array of objects representing volumes.
    */
   const renderVolumeMounts = (value: volumeMount[]) => {
     return (
-      <>
-        Volume Mounts:
+      <div className='content-box-2'>
+        <strong className='content-title'>Volume Mounts:</strong>
         {value.map((mountInfo, index) => (
           <ul key={`mountInfo${index}`}>
-            Name: {mountInfo.name}
-            <br />
-            Mount Path: {mountInfo.mountPath}
+            <u>Name:</u>
+            {' ' + mountInfo.name}
+            <br/>
+            <u>Mount Path:</u>
+            {' ' + mountInfo.mountPath}
           </ul>
         ))}
-      </>
+      </div>
     );
   };
 
@@ -104,15 +93,18 @@ function PodCard (props: podCardProps) {
   return (
     <div className="pod-card">
       <h5>{podName}</h5>
-      <h6>{uid}</h6>
-      <ul key={`${nodeName ?? ''}`} style={{ color: podPhaseStatusToColor(phase!) }}>{phase}</ul>
-      <ul key={`${nodeName ?? ''}nodeName`}>{nodeName}</ul>
-      <ul key={hostIP}>{hostIP}</ul>
+      <h6><strong>uid:</strong> {uid}</h6>
+      <ul key={`${nodeName ?? ''}`} style={{ color: podPhaseStatusToColor(phase!) }}>Status: {phase}</ul>
+      <ul key={`${nodeName ?? ''}nodeName`}><strong>node:</strong> {nodeName}</ul>
       <hr className="light-hr" />
-      {containerArrToText()}
-      <hr className="light-hr" />
-      <ul key={'podIP'}>Pod IPs:</ul>
+      <strong key={'podIP'}>Pod IP(s):</strong>
       <ul key={'renderedPodIps'}>{renderPodIps()}</ul>
+      <br></br>
+      <div className='content-box'>
+      <strong className='content-title'> Containers: </strong>
+      {containerArrToText()}
+      </div>
+      <hr className="light-hr" />
     </div>
   );
 }

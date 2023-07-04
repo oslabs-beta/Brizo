@@ -81,13 +81,20 @@ function ViewCluster () {
     }
   };
 
+  const fetchK6Test = async () => {
+    setDisplayLoadingGif(true);
+    const response = await axios.get('/api/k6/autoscale');
+    if (response.status === 200) setDisplayLoadingGif(false);
+    // add live data rendering later
+  };
+
   return (
     <>
       <div className="benchmark-buttons-container">
         <div className="benchmark-buttons">
           <button onClick={() => { void fetchLocalCISTest(); }} style={{ backgroundColor: '#90ee90' }}>local cis test</button>
           <button onClick={() => { void fetchEKSCISTest(); }} style={{ backgroundColor: '#78cc78' }}>eks cis test</button>
-          <button onClick={() => ({})} style={{ backgroundColor: '#90ee90' }}>load bal test</button>
+          <button onClick={() => { void fetchK6Test(); }} style={{ backgroundColor: '#90ee90' }}>autoscaling test</button>
         </div>
       </div>
       <hr/>

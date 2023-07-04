@@ -6,18 +6,20 @@ function NodeCard (props: nodeCardProps) {
   const convertKiToGB = (kiValue: string) =>
     Math.floor(parseInt(kiValue) / 976600);
 
-  const { name, uid, podCIDRs, addresses, allocatable, capacity, images } =
+  const { name, uid, addresses, allocatable, capacity, images } =
     props;
 
   const addressList = addresses.map((address, index) => (
     <ul key={`address${uid}${index}`}>
-      {address.address} | {address.type}
+      <u>{address.address}</u> {' --> ' + address.type}
     </ul>
   ));
   const imageList = images.map((imageObject, index) => {
     return (
         <ul key={`image${index}`}>
-        {imageObject.names![1]} | size: {convertBytesToMB(imageObject.sizeBytes)}MB
+        <u>name:</u>{' ' + imageObject.names![1]}
+        <br></br>
+        <u>size:</u> {' '} {convertBytesToMB(imageObject.sizeBytes)}MB
         </ul>
     );
   });
@@ -25,32 +27,32 @@ function NodeCard (props: nodeCardProps) {
   return (
     <div className="card">
       <h3>{name}</h3>
-      <h4>{uid}</h4>
-      <ul>podCIDRs: {podCIDRs}</ul>
-      <ul>addresses:</ul>
+      <h4><strong>uid: </strong>{uid}</h4>
+      <div className='content-box'>
+      <strong className='content-title'>addresses:</strong>
       {addressList}
-      <ul>allocatable resources / capacity</ul>
+      </div>
+      <br></br>
+      <div className='content-box'>
+      <strong className='content-title'>allocatable resources / capacity: </strong>
       <ul>
-        cpu cores: {allocatable!.cpu} / {capacity!.cpu} | allocatable storage:{' '}
+        <u>cpu cores:</u> {allocatable!.cpu} / {capacity!.cpu}
+      </ul>
+      <ul>
+        <u>storage:</u>{' '}
         {convertKiToGB(allocatable!['ephemeral-storage'])}GB /{' '}
         {convertKiToGB(capacity!['ephemeral-storage'])}GB
       </ul>
       <ul>
-        hugepages-1Gi: {allocatable!['hugepages-1Gi']} /{' '}
-        {capacity!['hugepages-1Gi']} | hugepages-2Mi:{' '}
-        {allocatable!['hugepages-2Mi']} / {capacity!['hugepages-2Mi']}
+        <u>memory:</u> {convertKiToGB(allocatable!.memory)}GB /{' '}
+        {convertKiToGB(capacity!.memory)}GB
       </ul>
       <ul>
-        hugepages-32Mi: {allocatable!['hugepages-32Mi']} /{' '}
-        {capacity!['hugepages-32Mi']} | hugepages-64Ki:{' '}
-        {allocatable!['hugepages-64Ki']} / {capacity!['hugepages-64Ki']}
-      </ul>
-      <ul>
-        memory: {convertKiToGB(allocatable!.memory)}GB /{' '}
-        {convertKiToGB(capacity!.memory)}GB | pods: {allocatable!.pods} /{' '}
+        <u>pods:</u> {allocatable!.pods} /{' '}
         {capacity!.pods}
       </ul>
-      <ul>images:</ul>
+        </div>
+      <strong>images:</strong>
       <div className="image-scrollbox">{imageList}</div>
     </div>
   );
