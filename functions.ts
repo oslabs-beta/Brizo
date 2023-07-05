@@ -33,3 +33,21 @@ export const passedNumberFromTest = (resultText: string) => parseInt(resultText)
  * @param {string} resultStatus - The `resultStatus` parameter is a string that represents the status of a test.
  */
 export const checkStatusFromTest = (resultStatus: string) => resultStatus.match(/[A-Z]+/g)![0];
+
+/**
+ * Converts a value in bytes to megabytes.
+ * @param {number | undefined} bytesValue - The `bytesValue` parameter is a number representing the size in bytes.
+ */
+export const convertBytesToMB = (bytesValue: number | undefined) => {
+  if (bytesValue === undefined) return 0;
+  return Math.floor(bytesValue * 0.000001);
+};
+
+/**
+ * Converts a value in bytes to gigabytes.
+ * @param {number | undefined} bytesValue - The `bytesValue` parameter is a number representing the size in bytes.
+ */
+export const convertBytesToGB = (bytesValue: number | undefined) => {
+  if (bytesValue === undefined) return 0;
+  return Math.floor(bytesValue * 0.000000001);
+};
