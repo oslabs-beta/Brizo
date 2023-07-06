@@ -45,11 +45,6 @@ const ViewStructure = () => {
     try {
       const response = await axios.get(`/api/cluster/node/${selectedNamespace}`);
       const nodesData: nodeCardProps[] = response.data;
-      const listOfPodsInNode = [];
-      for (const nodeData of nodesData) {
-        listOfPodsInNode.push([nodeData.name, false]);
-      }
-      setPodsInNode(listOfPodsInNode);
       createNodeComponents(nodesData);
       await fetchPod(selectedNamespace);
     } catch (error) {
