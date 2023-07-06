@@ -97,7 +97,7 @@ function PodCard (props: podCardProps) {
     <div className={`pod-card ${nodeName!}`}>
       <h5>{podName}</h5>
       <h6><strong>uid:</strong> {uid}</h6>
-      <ul key={`${nodeName ?? ''}`} style={{ color: podPhaseStatusToColor(phase!) }}>Status: {phase}</ul>
+      <ul key={`${nodeName ?? ''}stausphase`} style={{ color: podPhaseStatusToColor(phase!) }}>Status: {phase}</ul>
       <ul key={`${nodeName ?? ''}nodeName`}><strong>node:</strong> {nodeName}</ul>
       <hr className="light-hr" />
       <strong key={'podIP'}>Pod IP(s):</strong>
