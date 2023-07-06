@@ -1,1 +1,10 @@
 node_modules
+.DS_Store
+dist
+output.txt
+go.mod 
+go.sum 
+kubeBenchRunner.go 
+output.json
+TODO
+eks-setup

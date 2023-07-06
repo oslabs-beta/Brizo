@@ -1,0 +1,38 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "standard-with-typescript",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "overrides": [
+    ],
+    "ignorePatterns": [
+      "k6/script.js"
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "project": ["tsconfig.json"]
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "semi": ["error", "always"],
+        "@typescript-eslint/semi": ["off"],
+        "@typescript-eslint/no-non-null-assertion": ["off"]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    }
+}
