@@ -14,6 +14,7 @@
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
     "axios": "^1.4.0",
+    "chart.js": "^4.3.0",
     "child_process": "^1.0.2",
     "css-loader": "^6.8.1",
     "dotenv": "^16.1.4",

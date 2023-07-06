@@ -1,8 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { exec } from 'child_process';
 import fs from 'fs';
-
-// type imports
 import type {
   allTestInfoType,
   allTestInfoEKSType,
@@ -21,17 +19,13 @@ const securityController = {
       const podName = await securityController.getKubeBenchPodName();
 
       // grab the log of the kube bench pod
-      const kubeBenchOutput = await securityController.getKubeBenchPodLog(
-        podName
-      );
+      const kubeBenchOutput = await securityController.getKubeBenchPodLog(podName);
 
       // write kube bench pod log to output.txt
       securityController.writeOutputData(kubeBenchOutput, next);
 
       // parse kube bench pod log data before sending to front end
-      const allTestInfo = securityController.filterOutputData(
-        kubeBenchOutput.split('\n')
-      );
+      const allTestInfo = securityController.filterOutputData(kubeBenchOutput.split('\n'));
 
       // save parsed kube bench pod log data on res.locals
       res.locals.allTestInfo = allTestInfo;
@@ -53,17 +47,13 @@ const securityController = {
       const podName = await securityController.getKubeBenchPodName();
 
       // grab the log of the kube bench pod
-      const kubeBenchOutput = await securityController.getKubeBenchPodLog(
-        podName
-      );
+      const kubeBenchOutput = await securityController.getKubeBenchPodLog(podName);
 
       // write kube bench pod log to output.txt
       securityController.writeOutputData(kubeBenchOutput, next);
 
       // filter kube bench pod log data before sending to front end
-      const allTestInfoEKS = securityController.filterOutputDataEKS(
-        kubeBenchOutput.split('\n')
-      );
+      const allTestInfoEKS = securityController.filterOutputDataEKS(kubeBenchOutput.split('\n'));
 
       // save parsed kube bench pod log data on res.locals
       res.locals.allTestInfoEKS = allTestInfoEKS;
@@ -76,7 +66,7 @@ const securityController = {
     }
   },
 
-  // method to apply job
+  // method to apply kube bench job
   applyKubeBenchJob: async (jobPath: string, next: NextFunction) => {
     // define command to create kube bench test as a job
     const command = `kubectl apply -f ${jobPath}`;
@@ -96,8 +86,7 @@ const securityController = {
     // return a promise of type string for grabbing the pod log later
     return await new Promise<string>((resolve, reject) => {
       // define command to find the kube bench pod name
-      const command =
-        'kubectl get pods -l job-name=kube-bench -o=jsonpath="{.items[0].metadata.name}"';
+      const command = 'kubectl get pods -l job-name=kube-bench -o=jsonpath="{.items[0].metadata.name}"';
 
       // run command with exec
       exec(command, (error, stdout) => {
@@ -171,12 +160,6 @@ const securityController = {
     });
 
     // initialize index variables to slice sections from testLines
-    /* initialize outside of for loop so we can access for object assignment below
-      the assigned boolean is used to make sure we find the first index and don't reassign later.
-      for example, if our first test starts with '1.1.1', it would be reassigned on test '1.1.11' later.
-      the assigned property accounts for this
-    */
-
     // SECTION 1 INDICES
     const cpsctStart: indexObjectType = {
       position: 0,
@@ -405,13 +388,14 @@ const securityController = {
       )
     };
 
+    // create array of total summary remediations
     const totalSummary: string[] = outputData.slice(
       outputData.indexOf('== Summary total =='),
       outputData.indexOf('== Summary total ==') + 5
     );
 
     // create all test info object to return to runKubeBench to be sent to front end
-    // this object stores all the objects we just created for individual sections
+    // this object stores all the objects we created for individual sections
     const allTestInfo: allTestInfoType = {
       controlPlaneSecurityConfiguration,
       etcdNodeConfiguration,
@@ -441,12 +425,6 @@ const securityController = {
     });
 
     // initialize index variables to slice sections from testLines
-    /* initialize outside of for loop so we can access for object assignment below
-      the assigned boolean is used to make sure we find the first index and don't reassign later.
-      for example, if our first test starts with '1.1.1', it would be reassigned on test '1.1.11' later.
-      the assigned property accounts for this
-    */
-
     // SECTION INDICES
     const wnscStart: indexObjectType = {
       position: 0,
@@ -502,7 +480,7 @@ const securityController = {
     );
 
     // create all test info object to return to runKubeBench to be sent to front end
-    // this object stores all the objects we just created for individual sections
+    // this object stores all the objects we created for individual sections
     const allTestInfoEKS: allTestInfoEKSType = {
       workerNodeSecurity,
       totalSummary
@@ -513,21 +491,29 @@ const securityController = {
   },
 
   condenseRemediations: (remediationsArr: string[]) => {
-    const parsedRemediations: string[] = [];
+    // initialize condensed remediations array
+    const condensedRemediations: string[] = [];
+    // declare combined string variable
     let combinedString = '';
 
+    // iterate over remediations array
     for (let index = 1; index < remediationsArr.length; index += 1) {
+      // check if the element is empty string
       if (remediationsArr[index] === '') {
+        // check if combined string has been reassigned
         if (combinedString !== '') {
-          parsedRemediations.push(combinedString);
+          condensedRemediations.push(combinedString);
           combinedString = '';
         }
       } else {
+        // add element to combined string variable
         combinedString += remediationsArr[index];
       }
     }
-    if (combinedString !== '') parsedRemediations.push(combinedString);
-    return parsedRemediations;
+    // check if combined string has been reassigned and push to array if so
+    if (combinedString !== '') condensedRemediations.push(combinedString);
+    // return condensed remediations array
+    return condensedRemediations;
   }
 };
 

@@ -11,7 +11,9 @@ import { podPhaseStatusToColor } from '../../../functions';
  */
 
 function PodCard (props: podCardProps) {
-  const { containers, hostIP, nodeName, phase, podIPs, podName, uid } = props;
+  const { containers, hostIP, nodeName, phase, podIPs, podName, uid, podsInNode } = props;
+
+  React.useEffect(() => { console.log(podsInNode); }, [podsInNode]);
 
   /**
    * Takes in the `container` object of type `V1Container` and iterates over
@@ -32,13 +34,14 @@ function PodCard (props: podCardProps) {
       // depending on the key, fire the correct render function, otherwise
       // the value is simply an array and so we map it to ul elements
       if (typeof value !== 'object') {
-        renderedValue = <ul key={value}><u>{key}:</u> {value}</ul>;
+        // renderedValue = <ul key={value}><u>{key}:</u> {value}</ul>;
       } else {
         if (key === 'volumeMounts') renderedValue = renderVolumeMounts(value);
+        if (key === 'volumeMounts') console.log(container[key]);
         else if (Array.isArray(value) && typeof value[0] !== 'object') {
           renderedValue = (<>
             {value.map((item: string, index) => (
-              <ul key={`${item}${index}`}>{item}</ul>
+              <ul key={`${index}${item}`}>{item}</ul>
             ))}</>);
         }
       }
@@ -57,7 +60,7 @@ function PodCard (props: podCardProps) {
       <div className='content-box-2'>
         <strong className='content-title'>Volume Mounts:</strong>
         {value.map((mountInfo, index) => (
-          <ul key={`mountInfo${index}`}>
+          <ul id={`mountInfo${index}`} key={`mountInfo${index}`}>
             <u>Name:</u>
             {' ' + mountInfo.name}
             <br/>
@@ -91,7 +94,7 @@ function PodCard (props: podCardProps) {
     ));
 
   return (
-    <div className="pod-card">
+    <div className={`pod-card ${nodeName!}`}>
       <h5>{podName}</h5>
       <h6><strong>uid:</strong> {uid}</h6>
       <ul key={`${nodeName ?? ''}`} style={{ color: podPhaseStatusToColor(phase!) }}>Status: {phase}</ul>

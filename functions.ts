@@ -51,3 +51,13 @@ export const convertBytesToGB = (bytesValue: number | undefined) => {
   if (bytesValue === undefined) return 0;
   return Math.floor(bytesValue * 0.000000001);
 };
+
+/**
+ * Converts a value in bytes to gigabytes.
+ * @param {number | undefined} bytesValue - The `bytesValue` parameter is a number representing the size in bytes.
+ * @param {number | undefined} decimalPlace - The `decimalPlace` parameter is a number representing the number of values after the decimal place that show.
+ */
+export const convertBytesToGBDecimal = (bytesValue: number | undefined, decimalPlace: number | undefined) => {
+  if (bytesValue === undefined) return 0;
+  return (bytesValue * 0.000000001).toFixed(decimalPlace);
+};

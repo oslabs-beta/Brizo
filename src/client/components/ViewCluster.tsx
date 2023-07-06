@@ -85,7 +85,6 @@ function ViewCluster () {
     setDisplayLoadingGif(true);
     const response = await axios.get('/api/k6/autoscale');
     if (response.status === 200) setDisplayLoadingGif(false);
-    // add live data rendering later
   };
 
   return (

@@ -32,7 +32,7 @@ function CISConfigResult (props: benchResult) {
   return (
     <div className='config-container'>
       <button onClick={() => { setShowMore(!showMore); }}>
-       <i className="fa-solid fa-arrow-down" /> {testName} <i className="fa-solid fa-arrow-down" /></button>
+        <i className="fa-solid fa-arrow-down" /> {testName} <i className="fa-solid fa-arrow-down" /></button>
       {showMore && <>
       <div className='result-container' style={{ margin: 0 }}>
           {summary.map((summaryText: string, index) => {

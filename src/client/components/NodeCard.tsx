@@ -6,7 +6,7 @@ function NodeCard (props: nodeCardProps) {
   const convertKiToGB = (kiValue: string) =>
     Math.floor(parseInt(kiValue) / 976600);
 
-  const { name, uid, addresses, allocatable, capacity, images } =
+  const { name, uid, addresses, allocatable, capacity, images, togglePods } =
     props;
 
   const addressList = addresses.map((address, index) => (
@@ -25,7 +25,8 @@ function NodeCard (props: nodeCardProps) {
   });
 
   return (
-    <div className="card">
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <div className="card" onClick={ togglePods } data-node-name={name}>
       <h3>{name}</h3>
       <h4><strong>uid: </strong>{uid}</h4>
       <div className='content-box'>

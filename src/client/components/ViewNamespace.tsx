@@ -5,8 +5,10 @@ import { staticPromQueries, dynamicPromQueries } from '../../../prometheusQuerie
 import type { newDynamicPromObject, newStaticPromObject } from '../../../types';
 import Loading from './Loading';
 import StaticPromComponent from './StaticPromComponent';
-// import DynamicPromComponent from './DynamicPromComponent';
 import MemoryUsageChart from './MemoryUsageChart';
+import { Doughnut } from 'react-chartjs-2';
+import CpuUsageChart from './CpuUsageChart';
+
 /**
  * ViewNamespace: Responsible for /namespace or namespace button.
  * Displays the metrics for all of the pods and nodes in the namespace.
@@ -19,33 +21,33 @@ const ViewNamespace = () => {
   const [displayLoadingGif, setDisplayLoadingGif] = React.useState(false);
   useAsyncEffect(async () => {
     setDisplayLoadingGif(true);
-    // await fetchMetricsData();
+    await fetchMetricsData();
     setDisplayLoadingGif(false);
   }, []);
 
-  // const fetchMetricsData = async () => {
-  //   const staticResponseObject = await axios.post('/api/prom/metrics/default', { queries: staticPromQueries });
-  //   setStaticPromData([...staticResponseObject.data]);
-  //   // console.log(staticResponseObject);
-  //   // const dynamicResponseObject = await axios.post('/api/prom/metrics/default', { queries: dynamicPromQueries });
-  //   // setDynamicPromData([...dynamicResponseObject.data]);
-  // };
-
-  const createStaticPromComp = () => {
-    const promArray = staticPromData.map((promQuery, index) => <StaticPromComponent data={promQuery} key={index}/>);
-    return promArray;
+  const fetchMetricsData = async () => {
+    const staticResponseObject = await axios.post('/api/prom/metrics/static', { queries: staticPromQueries });
+    console.log('Static response object: ', staticResponseObject);
+    setStaticPromData([...staticResponseObject.data]);
+    // console.log(staticResponseObject);
+    // const dynamicResponseObject = await axios.post('/api/prom/metrics/default', { queries: dynamicPromQueries });
+    // setDynamicPromData([...dynamicResponseObject.data]);
   };
 
-  // const createDynamicPromComp = () => {
-  //   const promArray = dynamicPromData.map((promQuery, index) => <DynamicPromComponent key={index} data={promQuery} />);
-  //   return promArray;
-  // };
+  const createStaticPromComp = () => {
+    return staticPromData.map((promQuery, index) => (
+      <div key={`${promQuery.queryName!}${index}`}>
+        <StaticPromComponent data={promQuery} key={`${promQuery.queryName!}${index}`} />
+      </div>
+    ));
+  };
 
   return (
     <>
       <MemoryUsageChart />
-      <div style={{ display: 'inline' }}>
-        {/* {createStaticPromComp()} */}
+      <CpuUsageChart />
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {createStaticPromComp()}
       </div>
       {/* text area horizontal scrollbar containing static information */}
       <hr />

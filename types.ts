@@ -168,6 +168,7 @@ export interface nodeCardProps {
   allocatable: Record<string, string> | undefined
   capacity: Record<string, string> | undefined
   images: V1ContainerImage[]
+  togglePods: (event: React.MouseEvent<HTMLDivElement>) => void
 }
 
 export interface podCardProps {
@@ -178,6 +179,7 @@ export interface podCardProps {
   hostIP?: string
   phase?: string
   podIPs: V1PodIP[]
+  podsInNode?: any
 }
 
 export interface livenessProbeObject {
@@ -266,8 +268,9 @@ export interface staticPromQueryObject {
 }
 
 export interface newStaticPromObject {
-  name?: string
+  queryName?: string
   value?: string
+  instance?: string
 }
 
 export interface datasetsType {

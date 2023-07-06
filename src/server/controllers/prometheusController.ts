@@ -59,14 +59,15 @@ const prometheusController = {
 
         // parse response
         const data = await response.json();
+        console.log(data.data.result);
         // iterate over data results
         data.data.result.forEach((element: staticPromQueryObject) => {
           // define new element to be pushed into array
-          console.log(element);
           if (element.metric.__name__ !== undefined) {
             const newElement: newStaticPromObject = {
-              name: element.metric.__name__,
-              value: element.value![1]
+              queryName: element.metric.__name__,
+              value: element.value![1],
+              instance: element.metric.instance
             };
             // push new element to array
             staticMetrics.push(newElement);

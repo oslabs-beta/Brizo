@@ -21,7 +21,7 @@ export default function NavbarComponent () {
           <img className='navbar-logo' src="https://i.imgur.com/0i6SfgA.png" width='64px'/>
           <button onClick={() => { navigateTo('/'); }} className='primary-button'>structure</button>
           <button onClick={() => { navigateTo('/namespace'); }} className='primary-button'>namespace metrics</button>
-          <button onClick={() => { navigateTo('/cluster'); }} className='primary-button'>cluster metrics</button>
+          <button onClick={() => { navigateTo('/cluster'); }} className='primary-button'>cluster testing</button>
         </div>
         <div>
           <button onClick={() => { refreshPage(); }} className='refresh-button'>

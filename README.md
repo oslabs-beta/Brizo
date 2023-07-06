@@ -59,9 +59,8 @@ Brizo is a lightweight developer tool built from scratch to help developers moni
 5. [Installation](#installation)
 6. [Scripts](#scripts)
 7. [File Structure](#file-structure)
-8. [Contributions](#contributions)
-9. [Our Team](#our-team)
-10. [License](#license)
+8. [Our Team](#our-team)
+9. [License](#license)
 
 ## Features
 
@@ -164,11 +163,7 @@ Below are descriptions of each npm script:
 INSERT FINAL FILE STRUCTURE BEFORE LAUNCH
 ```
 
-## Contributions
-
-We welcome contributions from the community. If you are interested in contributing to this project, please refer to our [Contributing Guidelines]() for more information.
-
-## Our Team
+## Our Team 
 
 <table style="width:40%;">
   <tr>
