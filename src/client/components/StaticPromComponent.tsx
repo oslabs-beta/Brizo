@@ -15,6 +15,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const StaticPromComponent = (props: { data: newStaticPromObject, key: string }) => {
   const { data } = props;
   const options = {
+    color: '#ffffff',
     plugins: {
       title: {
         display: true,

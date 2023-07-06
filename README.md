@@ -160,7 +160,55 @@ Below are descriptions of each npm script:
 ## File Structure
 
 ```
-INSERT FINAL FILE STRUCTURE BEFORE LAUNCH
+|____assets
+| |____brizo-high-resolution-color-logo.png
+| |____Team
+| | |____Anna.png
+| | |____Cortland.png
+| | |____DAWG.png
+| | |____Owen.png
+| | |____Weston.png
+|____kbcommands.md
+|____output.txt
+|____.eslintrc.json
+|____functions.ts
+|____src
+| |____server
+| | |____routers
+| | | |____apiRouter.ts
+| | | |____securityRouter.ts
+| | | |____clusterRouter.ts
+| | | |____prometheusRouter.ts
+| | | |____k6Router.ts
+| | |____controllers
+| | | |____k6Controller.ts
+| | | |____securityController.ts
+| | | |____clusterController.ts
+| | | |____prometheusController.ts
+| | |____server.ts
+| |____client
+| | |____index.tsx
+| | |____App.tsx
+| | |____index.html
+| | |____css
+| | | |____main.scss
+| | | |____skeleton.css
+| | | |____normalize.css
+| | |____components
+| | | |____MemoryUsageChart.tsx
+| | | |____ViewNamespace.tsx
+| | | |____GrandCISResults.tsx
+| | | |____ViewStructure.tsx
+| | | |____PodCard.tsx
+| | | |____NavbarComponent.tsx
+| | | |____NodeCard.tsx
+| | | |____MainContainer.tsx
+| | | |____StaticPromComponent.tsx
+| | | |____CpuUsageChart.tsx
+| | | |____ViewCluster.tsx
+| | | |____DynamicPromComponent.tsx
+| | | |____Loading.tsx
+| | | |____CISConfigResult.tsx
 ```
 
 ## Our Team 

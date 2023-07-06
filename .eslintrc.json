@@ -13,6 +13,9 @@
     ],
     "overrides": [
     ],
+    "ignorePatterns": [
+      "k6/script.js"
+    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "project": ["tsconfig.json"]

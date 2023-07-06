@@ -277,7 +277,6 @@ export interface datasetsType {
   label: string
   data: string[]
   backgroundColor: string
-  color?: string
 }
 
 export interface chartType {

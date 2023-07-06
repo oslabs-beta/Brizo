@@ -25,6 +25,13 @@ export const options = {
       apm: [
         {
           provider: 'prometheus',
+          remoteWriteURL: 'http://10.100.45.157:19090/api/v1/write',
+          includeDefaultMetrics: true,
+          includeTestRunId: true,
+          resampleRate: 3
+        },
+        {
+          provider: 'prometheus',
           remoteWriteURL: 'https://prometheus-prod-36-prod-us-west-0.grafana.net/api/prom/push',
           // optional parameters
           credentials: {

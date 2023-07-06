@@ -34,7 +34,7 @@ function PodCard (props: podCardProps) {
       // depending on the key, fire the correct render function, otherwise
       // the value is simply an array and so we map it to ul elements
       if (typeof value !== 'object') {
-        // renderedValue = <ul key={value}><u>{key}:</u> {value}</ul>;
+        renderedValue = <ul key={value}><u>{key}:</u> {value}</ul>;
       } else {
         if (key === 'volumeMounts') renderedValue = renderVolumeMounts(value);
         if (key === 'volumeMounts') console.log(container[key]);

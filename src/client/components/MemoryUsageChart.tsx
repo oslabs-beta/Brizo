@@ -27,6 +27,7 @@ const options = {
   responsive: true,
   maintainAspectRatio: true,
   redraw: false,
+  color: '#ffffff',
   plugins: {
     legend: {
       display: false
@@ -45,8 +46,7 @@ const MemoryUsageChart = () => {
       {
         label: '',
         data: [] as string[],
-        backgroundColor: '#eeeeee',
-        color: 'eeeeee'
+        backgroundColor: '#eeeeee'
       }
     ]
   });
@@ -69,7 +69,7 @@ const MemoryUsageChart = () => {
 
   const addData = (data: newDynamicPromObject[]) => {
     const labels: string[] = [];
-    const datasets: Array<{ label: string, data: string[], backgroundColor: string, color: string, barPercentage: number, categoryPercentage: number }> = [];
+    const datasets: Array<{ label: string, data: string[], backgroundColor: string, barPercentage: number, categoryPercentage: number }> = [];
 
     data.forEach((e) => {
       if (!labels.includes(e.container!)) {
@@ -80,7 +80,6 @@ const MemoryUsageChart = () => {
         label: e.container!,
         data: [valueConvertedToGB],
         backgroundColor: '#eeeeee',
-        color: 'white',
         barPercentage: 0.5,
         categoryPercentage: 34
       });
