@@ -236,7 +236,7 @@ Below are descriptions of each npm script:
   </tr>
   <tr>
     <td>
-      <img src="./assets/Team/DAWG.png" style="width:6rem;" />
+      <img src="./assets/Team/Jimmy.jpg" style="width:6rem;" />
     </td>
     <td>
       <strong>Jimmy Tran</strong><br/>
