@@ -12,7 +12,6 @@ import { Bar } from 'react-chartjs-2';
 import useAsyncEffect from 'use-async-effect';
 import type { newDynamicPromObject } from '../../../types';
 import Loading from './Loading';
-import { convertBytesToGBDecimal } from '../../../functions';
 
 ChartJS.register(
   CategoryScale,
@@ -26,30 +25,31 @@ ChartJS.register(
 const options = {
   responsive: true,
   maintainAspectRatio: true,
-  redraw: false,
-  color: '#ffffff',
   plugins: {
     legend: {
       display: false
     },
     title: {
       display: true,
-      text: 'Memory Usage By Container'
+      text: 'CPU Usage by Container'
     }
   }
 };
 
-const MemoryUsageChart = () => {
+const CpuUsageChart = () => {
   const [chartD, setChartD] = React.useState({
     labels: [] as string[],
     datasets: [
       {
         label: '',
         data: [] as string[],
-        backgroundColor: '#eeeeee'
+        backgroundColor: '#eeeeee',
+        color: 'eeeeee',
+        barPercentage: 0.9
       }
     ]
   });
+
   const [haveData, setHaveData] = React.useState(false);
 
   useAsyncEffect(async () => { await fetchData(); }, []);
@@ -61,7 +61,7 @@ const MemoryUsageChart = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ queries: ['container_memory_usage_bytes'] })
+        body: JSON.stringify({ queries: ['container_cpu_usage_seconds_total'] })
       });
     const jsonData = await data.json();
     addData(jsonData);
@@ -69,21 +69,23 @@ const MemoryUsageChart = () => {
 
   const addData = (data: newDynamicPromObject[]) => {
     const labels: string[] = [];
-    const datasets: Array<{ label: string, data: string[], backgroundColor: string, barPercentage: number, categoryPercentage: number }> = [];
+    const datasets: Array<{ label: string, data: string[], backgroundColor: string, color: string, barPercentage: number, categoryPercentage: number }> = [];
 
     data.forEach((e) => {
       if (!labels.includes(e.container!)) {
         labels.push(e.container!);
       }
-      const valueConvertedToGB = `${convertBytesToGBDecimal(parseFloat(e.value!), 2)}`;
+      // console.log(e.container);
       datasets.push({
         label: e.container!,
-        data: [valueConvertedToGB],
+        data: [e.value!],
         backgroundColor: '#eeeeee',
+        color: 'white',
         barPercentage: 0.5,
         categoryPercentage: 34
       });
     });
+    // console.log(labels);
     const updatedChartD = {
       labels,
       datasets
@@ -91,6 +93,7 @@ const MemoryUsageChart = () => {
 
     setHaveData(true);
     setChartD(updatedChartD);
+    // console.log(updatedChartD);
   };
 
   if (!haveData) {
@@ -108,4 +111,4 @@ const MemoryUsageChart = () => {
   }
 };
 
-export default MemoryUsageChart;
+export default CpuUsageChart;

@@ -26,7 +26,7 @@ router.get(
 
 // get request for pod list
 router.get(
-  '/pod/:namespace',
+  '/pod/:nodeName',
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   clusterController.getPods,
   (req: Request, res: Response) => {

@@ -3,7 +3,7 @@ import NodeCard from './NodeCard';
 import PodCard from './PodCard';
 import { useNamespaces } from './MainContainer';
 import useAsyncEffect from 'use-async-effect';
-import type { namespaceObject, newNodeObject, newPodObject } from '../../../types';
+import type { namespaceObject, newNodeObject, newPodObject, nodeCardProps } from '../../../types';
 import axios from 'axios';
 
 /**
@@ -16,6 +16,7 @@ const ViewStructure = () => {
   const [namespaceButtons, setNamespaceButtons] = React.useState<JSX.Element[]>([]);
   const [nodeCards, setNodeCards] = React.useState<JSX.Element[]>([]);
   const [podComponents, setPodComponents] = React.useState<JSX.Element[]>([]);
+  const [podsInNode, setPodsInNode] = React.useState({});
 
   useAsyncEffect(async () => {
     await fetchNamespaces();
@@ -43,7 +44,7 @@ const ViewStructure = () => {
   const fetchNode = async (selectedNamespace: string): Promise<void> => {
     try {
       const response = await axios.get(`/api/cluster/node/${selectedNamespace}`);
-      const nodesData = response.data;
+      const nodesData: nodeCardProps[] = response.data;
       createNodeComponents(nodesData);
       await fetchPod(selectedNamespace);
     } catch (error) {
@@ -89,7 +90,6 @@ const ViewStructure = () => {
    * @param {newNodeObject[]} nodeData - An array of objects representing nodes.
   */
   const createNodeComponents = (nodeData: newNodeObject[]) => {
-    console.log(nodeData);
     const mappedNodes = nodeData.map((node, index) => {
       return (
         <NodeCard
@@ -101,6 +101,8 @@ const ViewStructure = () => {
           allocatable={node.allocatable}
           capacity={node.capacity}
           images={node.images ?? []}
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          togglePods={togglePods}
         />);
     });
     setNodeCards(mappedNodes);
@@ -110,7 +112,6 @@ const ViewStructure = () => {
    * @param {newPodObject[]} podData - An array of objects representing pods.
   */
   const createPodComponents = (podData: newPodObject[]) => {
-    console.log(podData);
     const mappedPods: JSX.Element[] = podData.map((newPodObject, index) => {
       return (
         <PodCard
@@ -122,11 +123,24 @@ const ViewStructure = () => {
           podIPs={newPodObject.podIPs ?? []}
           podName={newPodObject.podName}
           uid={newPodObject.uid}
+          podsInNode={podsInNode}
         />
       );
     });
     setPodComponents([]);
     setPodComponents(mappedPods);
+  };
+
+  const togglePods = async (event: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      const nodeName = event.currentTarget.getAttribute('data-node-name');
+      const response = await axios.get(`/api/cluster/pod/${nodeName!}`);
+      const podsInNode = response.data;
+      setPodsInNode(podsInNode);
+      createPodComponents(podsInNode);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -136,6 +150,7 @@ const ViewStructure = () => {
       </div>
       <hr />
       <div className="main-info-container">
+      {nodeCards.length > 0 && <><h1 style={{ margin: 0 }}>Nodes</h1><hr /></>}
         <div className="card-container">
           {nodeCards}
         </div>

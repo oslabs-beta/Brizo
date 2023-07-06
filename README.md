@@ -59,9 +59,8 @@ Brizo is a lightweight developer tool built from scratch to help developers moni
 5. [Installation](#installation)
 6. [Scripts](#scripts)
 7. [File Structure](#file-structure)
-8. [Contributions](#contributions)
-9. [Our Team](#our-team)
-10. [License](#license)
+8. [Our Team](#our-team)
+9. [License](#license)
 
 ## Features
 
@@ -161,14 +160,58 @@ Below are descriptions of each npm script:
 ## File Structure
 
 ```
-INSERT FINAL FILE STRUCTURE BEFORE LAUNCH
+|____assets
+| |____brizo-high-resolution-color-logo.png
+| |____Team
+| | |____Anna.png
+| | |____Cortland.png
+| | |____DAWG.png
+| | |____Owen.png
+| | |____Weston.png
+|____kbcommands.md
+|____output.txt
+|____.eslintrc.json
+|____functions.ts
+|____src
+| |____server
+| | |____routers
+| | | |____apiRouter.ts
+| | | |____securityRouter.ts
+| | | |____clusterRouter.ts
+| | | |____prometheusRouter.ts
+| | | |____k6Router.ts
+| | |____controllers
+| | | |____k6Controller.ts
+| | | |____securityController.ts
+| | | |____clusterController.ts
+| | | |____prometheusController.ts
+| | |____server.ts
+| |____client
+| | |____index.tsx
+| | |____App.tsx
+| | |____index.html
+| | |____css
+| | | |____main.scss
+| | | |____skeleton.css
+| | | |____normalize.css
+| | |____components
+| | | |____MemoryUsageChart.tsx
+| | | |____ViewNamespace.tsx
+| | | |____GrandCISResults.tsx
+| | | |____ViewStructure.tsx
+| | | |____PodCard.tsx
+| | | |____NavbarComponent.tsx
+| | | |____NodeCard.tsx
+| | | |____MainContainer.tsx
+| | | |____StaticPromComponent.tsx
+| | | |____CpuUsageChart.tsx
+| | | |____ViewCluster.tsx
+| | | |____DynamicPromComponent.tsx
+| | | |____Loading.tsx
+| | | |____CISConfigResult.tsx
 ```
 
-## Contributions
-
-We welcome contributions from the community. If you are interested in contributing to this project, please refer to our [Contributing Guidelines]() for more information.
-
-## Our Team
+## Our Team 
 
 <table style="width:40%;">
   <tr>

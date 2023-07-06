@@ -1,5 +1,5 @@
 export const staticPromQueries = [
-  'machine_cpu_cores',
+  // 'machine_cpu_cores',
   'machine_memory_bytes'
 ];
 
