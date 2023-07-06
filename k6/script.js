@@ -35,7 +35,8 @@ export const options = {
           remoteWriteURL: 'https://prometheus-prod-36-prod-us-west-0.grafana.net/api/prom/push',
           // optional parameters
           credentials: {
-            token: 'eyJrIjoiNDBkNGFmNjVkMWU2M2UxMDEzNjBmZjlkNjA0Y2ViZjgxNGE3MmQyYyIsIm4iOiJvd2VuIiwiaWQiOjg3OTI3MX0=',
+            token: '',
+            // insert your token here
           },
           includeDefaultMetrics: true,
           metrics: ['http_req_sending', 'my_rate', 'my_gauge'], //...other options,
