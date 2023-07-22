@@ -5,7 +5,7 @@ import NodeCard from '../src/client/components/NodeCard';
 import { MemoryRouter } from 'react-router-dom';
 import axios from 'axios';
 
-describe('test Podcard', () => {
+describe('test Nodecard', () => {
 
     const props = {
     "key": "1",

@@ -64,46 +64,51 @@ const MemoryUsageChart = () => {
         body: JSON.stringify({ queries: ['container_memory_usage_bytes'] })
       });
     const jsonData = await data.json();
-    addData(jsonData);
   };
 
   const addData = (data: newDynamicPromObject[]) => {
     const labels: string[] = [];
     const datasets: Array<{ label: string, data: string[], backgroundColor: string, barPercentage: number, categoryPercentage: number }> = [];
-
-    data.forEach((e) => {
-      if (!labels.includes(e.container!)) {
-        labels.push(e.container!);
-      }
-      const valueConvertedToGB = `${convertBytesToGBDecimal(parseFloat(e.value!), 2)}`;
-      datasets.push({
-        label: e.container!,
-        data: [valueConvertedToGB],
-        backgroundColor: '#eeeeee',
-        barPercentage: 0.5,
-        categoryPercentage: 34
+    if (data.length === 0) {
+      // If data is undefined or empty, return an empty component or message.
+      // Example: return <p>No data available.</p>;
+      setHaveData(false);
+    } else {
+      // needs to be guarded against undefined or null data
+      data.forEach((e) => {
+        if (!labels.includes(e.container!)) {
+          labels.push(e.container!);
+        }
+        const valueConvertedToGB = `${convertBytesToGBDecimal(parseFloat(e.value!), 2)}`;
+        datasets.push({
+          label: e.container!,
+          data: [valueConvertedToGB],
+          backgroundColor: '#eeeeee',
+          barPercentage: 0.5,
+          categoryPercentage: 34
+        });
       });
-    });
-    const updatedChartD = {
-      labels,
-      datasets
-    };
+      const updatedChartD = {
+        labels,
+        datasets
+      };
 
-    setHaveData(true);
-    setChartD(updatedChartD);
+      setHaveData(true);
+      setChartD(updatedChartD);
+    }
   };
 
   if (!haveData) {
-    return <p> loading </p>;
+    return <p>there is currently no data</p>;
   } else {
     return (
-    <div>
-      <Bar
-        options={options}
-        data={chartD}
-        redraw={true}
-      />
-    </div>
+      <div>
+        <Bar
+          options={options}
+          data={chartD}
+          redraw={true}
+        />
+      </div>
     );
   }
 };

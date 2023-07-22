@@ -70,43 +70,46 @@ const CpuUsageChart = () => {
   const addData = (data: newDynamicPromObject[]) => {
     const labels: string[] = [];
     const datasets: Array<{ label: string, data: string[], backgroundColor: string, color: string, barPercentage: number, categoryPercentage: number }> = [];
-
-    data.forEach((e) => {
-      if (!labels.includes(e.container!)) {
-        labels.push(e.container!);
-      }
-      // console.log(e.container);
-      datasets.push({
-        label: e.container!,
-        data: [e.value!],
-        backgroundColor: '#eeeeee',
-        color: 'white',
-        barPercentage: 0.5,
-        categoryPercentage: 34
+    if (data.length === 0) {
+      setHaveData(false);
+    } else {
+      data.forEach((e) => {
+        if (!labels.includes(e.container!)) {
+          labels.push(e.container!);
+        }
+        // console.log(e.container);
+        datasets.push({
+          label: e.container!,
+          data: [e.value!],
+          backgroundColor: '#eeeeee',
+          color: 'white',
+          barPercentage: 0.5,
+          categoryPercentage: 34
+        });
       });
-    });
-    // console.log(labels);
-    const updatedChartD = {
-      labels,
-      datasets
-    };
+      // console.log(labels);
+      const updatedChartD = {
+        labels,
+        datasets
+      };
 
-    setHaveData(true);
-    setChartD(updatedChartD);
+      setHaveData(true);
+      setChartD(updatedChartD);
+    }
     // console.log(updatedChartD);
   };
 
   if (!haveData) {
-    return <p> loading </p>;
+    return <p>there is currently no data</p>;
   } else {
     return (
-    <div>
-      <Bar
-        options={options}
-        data={chartD}
-        redraw={true}
-      />
-    </div>
+      <div>
+        <Bar
+          options={options}
+          data={chartD}
+          redraw={true}
+        />
+      </div>
     );
   }
 };
