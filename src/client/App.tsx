@@ -11,7 +11,7 @@ import MainContainer from './components/MainContainer';
  * provided.
  */
 
-const router = createHashRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: <MainContainer />,
