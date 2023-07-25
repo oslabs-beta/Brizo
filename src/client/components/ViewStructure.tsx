@@ -79,7 +79,7 @@ const ViewStructure = () => {
         onClick={() => {
           void fetchNode(namespaceObject.name);
         }}
-        >
+      >
         {namespaceObject.name}
       </button>
     ));
@@ -150,7 +150,7 @@ const ViewStructure = () => {
       </div>
       <hr />
       <div className="main-info-container">
-      {nodeCards.length > 0 && <><h1 style={{ margin: 0 }}>Nodes</h1><hr /></>}
+        {nodeCards.length > 0 && <><h1 style={{ margin: 0 }}>Nodes</h1><hr /></>}
         <div className="card-container">
           {nodeCards}
         </div>

@@ -72,8 +72,10 @@ Brizo offers several key features that make it a valuable tool for kubernetes cl
 
 3. **Security Testing**: Brizo compares your cluster configuration to the CIS security standards, ensuring proper setup for developers. Brizo also offers remediations to address any of the test warnings/failures.
 
-4. **Auotscale Testing**: Brizo works with Grafana Cloud k6 services to artificially create traffic spikes and monitor your cluster's responsiveness, which helps developers identify potential bottlenecks in their cluster configuration during the development phase.
-
+4. **Autoscale Testing**: Brizo works with Grafana Cloud k6 services to artificially create traffic spikes and monitor your cluster's responsiveness, which helps developers identify potential bottlenecks in their cluster configuration during the development phase.
+<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmJienAyeHdzcnE3YW1zcjVhdjF1OHJybmVueWE0MHIzd2JwbnphZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FjcsLGyxj1D2DUqFkj/giphy.gif">
+<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWZ0cjB2eTdubTM4cTN2bHpzY2tyNTUxbTc5bW8xZTNzbjcyd25zcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NnoaV9WhdHLusgvtVT/giphy.gif">
+<img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXA3a2hidTlqZjB1NHZ0OGd6aGRib29kdmMwMXZ2M3cycjIxb2xleiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/q8BbNW4FTlATTOJDB3/giphy.gif">
 ## Benefits
 
 By using Brizo, developers can enjoy numerous benefits, such as:
@@ -226,7 +228,7 @@ Below are descriptions of each npm script:
   </tr>
   <tr>
     <td>
-      <img src="./assets/Team/Owen.png" style="width:6rem;" />
+      <img src="./assets/Team/Owen2.png" style="width:6rem;" />
     </td>
     <td>
       <strong>Owen Hill</strong><br/>
